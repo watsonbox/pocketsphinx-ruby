@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'ruby/pocketsphinx/version'
+require 'pocketsphinx/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "ruby-pocketsphinx"
-  spec.version       = Ruby::Pocketsphinx::VERSION
+  spec.version       = Pocketsphinx::VERSION
   spec.authors       = ["Howard Wilson"]
   spec.email         = ["howard@watsonbox.net"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.summary       = %q{Ruby pocketsphinx bindings}
+  spec.description   = %q{Ruby pocketsphinx bindings generated using SWIG interface.}
+  spec.homepage      = "https://github.com/watsonbox/ruby-pocketsphinx"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
