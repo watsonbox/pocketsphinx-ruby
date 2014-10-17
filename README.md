@@ -1,4 +1,4 @@
-# Ruby::Pocketsphinx
+# pocketsphinx-ruby
 
 TODO: Write a gem description
 
@@ -6,7 +6,7 @@ TODO: Write a gem description
 
 Add this line to your application's Gemfile:
 
-    gem 'ruby-pocketsphinx'
+    gem 'pocketsphinx-ruby'
 
 And then execute:
 
@@ -14,7 +14,8 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install ruby-pocketsphinx
+    $ gem install pocketsphinx-ruby
+
 
 ## Usage
 
@@ -22,7 +23,7 @@ TODO: Write usage instructions here
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/ruby-pocketsphinx/fork )
+1. Fork it ( https://github.com/[my-github-username]/pocketsphinx-ruby/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

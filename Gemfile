@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in ruby-pocketsphinx.gemspec
+# Specify your gem's dependencies in pocketsphinx-ruby.gemspec
 gemspec
