@@ -2,6 +2,7 @@
 
 [![Build Status](http://img.shields.io/travis/watsonbox/pocketsphinx-ruby.svg?style=flat)](https://travis-ci.org/watsonbox/pocketsphinx-ruby)
 [![Code Climate](http://img.shields.io/codeclimate/github/watsonbox/pocketsphinx-ruby/badges/gpa.svg?style=flat)](https://codeclimate.com/github/watsonbox/pocketsphinx-ruby)
+[![Coverage Status](https://img.shields.io/coveralls/watsonbox/pocketsphinx-ruby.svg?style=flat)](https://coveralls.io/r/watsonbox/pocketsphinx-ruby)
 
 ## Installation
 

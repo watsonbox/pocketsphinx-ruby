@@ -1,3 +1,6 @@
+require 'coveralls'
+Coveralls.wear!
+
 require 'pocketsphinx'
 
 POCKETSPHINX_LOG_FILE = "./log/pocketsphinx_test.log"
