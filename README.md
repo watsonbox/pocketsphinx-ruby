@@ -1,6 +1,6 @@
 # pocketsphinx-ruby
 
-TODO: Write a gem description
+[![Build Status](http://img.shields.io/travis/watsonbox/pocketsphinx-ruby.svg?style=flat)](https://travis-ci.org/watsonbox/pocketsphinx-ruby)
 
 ## Installation
 

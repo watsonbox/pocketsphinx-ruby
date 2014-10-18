@@ -13,7 +13,7 @@ before_install:
   - make
   - sudo make install
   - cd ..
-  - get clone https://github.com/cmusphinx/pocketsphinx.git
+  - git clone https://github.com/cmusphinx/pocketsphinx.git
   - cd pocketsphinx
   - ./autogen.sh
   - ./configure
