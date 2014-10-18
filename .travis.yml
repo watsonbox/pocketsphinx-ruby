@@ -1,0 +1,21 @@
+language: ruby
+rvm:
+  - 2.1.2
+  - 2.0.0
+  - 1.9.3
+before_install:
+  - git clone https://github.com/cmusphinx/sphinxbase.git
+  - cd sphinxbase
+  - ./autogen.sh
+  - ./configure
+  - make
+  - sudo make install
+  - cd ..
+  - get clone https://github.com/cmusphinx/pocketsphinx.git
+  - cd pocketsphinx
+  - ./autogen.sh
+  - ./configure
+  - make
+  - sudo make install
+  - cd ..
+  - sudo ldconfig
