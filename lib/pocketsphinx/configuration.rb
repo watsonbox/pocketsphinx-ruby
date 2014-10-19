@@ -2,6 +2,8 @@ require 'pocketsphinx/configuration/setting_definition'
 
 module Pocketsphinx
   class Configuration
+    attr_reader :ps_config
+
     private_class_method :new
 
     def initialize(ps_arg_defs)
@@ -10,6 +12,10 @@ module Pocketsphinx
 
       # Sets default settings based on definitions
       @ps_config = API::Sphinxbase.cmd_ln_parse_r(nil, ps_arg_defs, 0, nil, 1)
+
+      # Sets default grammar and language model if they are not set explicitly and
+      # are present in the default search path.
+      API::Pocketsphinx.ps_default_search_args(@ps_config)
     end
 
     def self.default
