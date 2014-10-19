@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Decoder do
   subject { @decoder }
+  let(:ps_api) { @decoder.ps_api = double }
 
   # Share decoder across all examples for speed
   before :all do
@@ -11,7 +12,7 @@ describe Decoder do
   describe '#process_raw' do
     it 'calls libpocketsphinx' do
       FFI::MemoryPointer.new(:int16, 4096) do |buffer|
-        expect(API::Pocketsphinx)
+        expect(ps_api)
           .to receive(:ps_process_raw)
           .with(subject.ps_decoder, buffer, 4096, 0, 0)
           .and_return(0)
@@ -22,7 +23,7 @@ describe Decoder do
 
     it 'raises an exception on error' do
       FFI::MemoryPointer.new(:int16, 4096) do |buffer|
-        expect(API::Pocketsphinx)
+        expect(ps_api)
           .to receive(:ps_process_raw)
           .with(subject.ps_decoder, buffer, 4096, 0, 0)
           .and_return(-1)
@@ -35,7 +36,7 @@ describe Decoder do
 
   describe '#start_utterance' do
     it 'calls libpocketsphinx' do
-      expect(API::Pocketsphinx)
+      expect(ps_api)
         .to receive(:ps_start_utt)
         .with(subject.ps_decoder, "Utterance Name")
         .and_return(0)
@@ -44,7 +45,7 @@ describe Decoder do
     end
 
     it 'raises an exception on error' do
-      expect(API::Pocketsphinx)
+      expect(ps_api)
         .to receive(:ps_start_utt)
         .with(subject.ps_decoder, "Utterance Name")
         .and_return(-1)
@@ -56,7 +57,7 @@ describe Decoder do
 
   describe '#end_utterance' do
     it 'calls libpocketsphinx' do
-      expect(API::Pocketsphinx)
+      expect(ps_api)
         .to receive(:ps_end_utt)
         .with(subject.ps_decoder)
         .and_return(0)
@@ -65,7 +66,7 @@ describe Decoder do
     end
 
     it 'raises an exception on error' do
-      expect(API::Pocketsphinx)
+      expect(ps_api)
         .to receive(:ps_end_utt)
         .with(subject.ps_decoder)
         .and_return(-1)
@@ -77,7 +78,7 @@ describe Decoder do
 
   describe '#in_speech' do
     it 'calls libpocketsphinx' do
-      expect(API::Pocketsphinx)
+      expect(ps_api)
         .to receive(:ps_get_in_speech)
         .with(subject.ps_decoder)
         .and_return(0)
@@ -88,7 +89,7 @@ describe Decoder do
 
   describe '#hypothesis' do
     it 'calls libpocketsphinx' do
-      expect(API::Pocketsphinx)
+      expect(ps_api)
         .to receive(:ps_get_hyp)
         .with(subject.ps_decoder, nil, nil)
         .and_return("Hypothesis")
