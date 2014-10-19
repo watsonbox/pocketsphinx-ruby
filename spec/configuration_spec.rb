@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Pocketsphinx::Configuration do
+describe Configuration do
   subject { Pocketsphinx::Configuration.default }
 
   it "provides a default pocketsphinx configuration" do
