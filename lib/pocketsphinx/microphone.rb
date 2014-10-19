@@ -12,7 +12,9 @@ module Pocketsphinx
     #
     # @param [Fixnum] sample_rate Samples per second for recording, e.g. 16000 for 16kHz
     # @param [String] default_device The device name
-    def initialize(sample_rate = 16000, default_device = nil)
+    # @param [Object] ps_api A SphinxAD API implementation to use, API::SphinxAD if not provided
+    def initialize(sample_rate = 16000, default_device = nil, ps_api = nil)
+      @ps_api = ps_api
       @ps_audio_device = ps_api.ad_open_dev(default_device, sample_rate)
 
       # Ensure that audio device is closed when object is garbage collected
