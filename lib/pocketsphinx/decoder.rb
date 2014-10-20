@@ -10,7 +10,7 @@ module Pocketsphinx
       @ps_decoder = ps_api.ps_init(configuration.ps_config)
     end
 
-    # Decode a raw audio stream, opening a file if path given
+    # Decode a raw audio stream as a single utterance, opening a file if path given
     #
     # See #decode_raw
     #
@@ -25,7 +25,7 @@ module Pocketsphinx
       end
     end
 
-    # Decode a raw audio stream.
+    # Decode a raw audio stream as a single utterance.
     #
     # No headers are recognized in this files.  The configuration parameters samprate
     # and input_endian are used to determine the sampling rate and endianness of the stream,

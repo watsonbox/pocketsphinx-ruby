@@ -47,6 +47,7 @@ module Pocketsphinx
       name ? details.first : details
     end
 
+    # Get a configuration setting
     def [](name)
       case find_definition(name).type
       when :integer
@@ -62,6 +63,7 @@ module Pocketsphinx
       end
     end
 
+    # Set a configuration setting with type checking
     def []=(name, value)
       case find_definition(name).type
       when :integer

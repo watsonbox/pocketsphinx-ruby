@@ -1,10 +1,13 @@
 module Pocketsphinx
-  # Provides non-blocking audio recording using libsphinxad
+  # Provides non-blocking live audio recording using libsphinxad
+  #
+  # Implements Recordable interface (#record and #read_audio)
   class Microphone
     Error = Class.new(StandardError)
 
     attr_reader :ps_audio_device
     attr_writer :ps_api
+    attr_reader :sample_rate
 
     # Opens an audio device for recording
     #
@@ -14,8 +17,9 @@ module Pocketsphinx
     # @param [String] default_device The device name
     # @param [Object] ps_api A SphinxAD API implementation to use, API::SphinxAD if not provided
     def initialize(sample_rate = 16000, default_device = nil, ps_api = nil)
+      @sample_rate = sample_rate
       @ps_api = ps_api
-      @ps_audio_device = ps_api.ad_open_dev(default_device, sample_rate)
+      @ps_audio_device = self.ps_api.ad_open_dev(default_device, sample_rate)
 
       # Ensure that audio device is closed when object is garbage collected
       ObjectSpace.define_finalizer(self, self.class.finalize(ps_api, @ps_audio_device))
@@ -46,10 +50,22 @@ module Pocketsphinx
     # Read next block of audio samples while recording; read upto max samples into buf.
     #
     # @param [FFI::Pointer] buffer 16bit buffer of at least max_samples in size
-    # @return [Fixnum] Samples actually read (could be 0 since non-blocking); -1 if not
+    # @params [Fixnum] max_samples The maximum number of samples to read from the audio device
+    # @return [Fixnum] Samples actually read (could be 0 since non-blocking); nil if not
     #   recording and no more samples remaining to be read from most recent recording.
     def read_audio(buffer, max_samples = 4096)
-      ps_api.ad_read(@ps_audio_device, buffer, max_samples)
+      samples = ps_api.ad_read(@ps_audio_device, buffer, max_samples)
+      samples if samples >= 0
+    end
+
+    # A Recordable may specify an audio reading delay
+    #
+    # In the case of the Microphone, because we are doing non-blocking reads,
+    # we specify a delay which should fill half of the max buffer size
+    #
+    # @param [Fixnum] max_samples The maximum samples we tried to read from the audio device
+    def read_audio_delay(max_samples = 4096)
+      max_samples / (2 * sample_rate)
     end
 
     def close_device

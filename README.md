@@ -62,6 +62,19 @@ Pocketsphinx::LiveSpeechRecognizer.new.recognize do |speech|
 end
 ```
 
+The `AudioFileSpeechRecognizer` decodes directly from an audio file by coordinating interactions between an `AudioFile` and `Decoder`.
+
+```ruby
+recognizer = Pocketsphinx::AudioFileSpeechRecognizer.new
+
+recognizer.recognize('spec/assets/audio/goforward.raw') do |speech|
+  puts speech # => "go forward ten years"
+end
+```
+
+These two classes split speech into utterances by detecting silence between them. By default this uses Pocketsphinx's internal Voice Activity Detection (VAD) which can be configured by adjusting the `vad_postspeech`, `vad_prespeech`, and `vad_threshold` configuration settings.
+
+
 ## Configuration
 
 All of Pocketsphinx's decoding settings are managed by the `Configuration` class, which can be passed into the high-level speech recognizers:
@@ -113,7 +126,7 @@ To open this audio file take a look at [this wiki page](https://github.com/watso
 
 ## Decoder
 
-The `Decoder` class uses Pocketsphinx's libpocketsphinx to decode audio data into text.
+The `Decoder` class uses Pocketsphinx's libpocketsphinx to decode audio data into text. For example to decode a single utterance:
 
 ```ruby
 decoder = Decoder.new(Configuration.default)
