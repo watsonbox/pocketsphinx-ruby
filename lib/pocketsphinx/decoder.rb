@@ -10,6 +10,42 @@ module Pocketsphinx
       @ps_decoder = ps_api.ps_init(configuration.ps_config)
     end
 
+    # Decode a raw audio stream, opening a file if path given
+    #
+    # See #decode_raw
+    #
+    # @param [IO] audio_path_or_file The raw audio stream or file path to decode as a single utterance
+    # @param [Fixnum] max_samples The maximum samples to process from the stream on each iteration
+    def decode(audio_path_or_file, max_samples = 2048)
+      case audio_path_or_file
+      when String
+        File.open(audio_path_or_file, 'rb') { |f| decode_raw(f, max_samples) }
+      else
+        decode_raw(audio_path_or_file, max_samples)
+      end
+    end
+
+    # Decode a raw audio stream.
+    #
+    # No headers are recognized in this files.  The configuration parameters samprate
+    # and input_endian are used to determine the sampling rate and endianness of the stream,
+    # respectively.  Audio is always assumed to be 16-bit signed PCM.
+    #
+    # @param [IO] audio_file The raw audio stream to decode as a single utterance
+    # @param [Fixnum] max_samples The maximum samples to process from the stream on each iteration
+    def decode_raw(audio_file, max_samples = 2048)
+      start_utterance
+
+      FFI::MemoryPointer.new(:int16, max_samples) do |buffer|
+        while data = audio_file.read(max_samples * 2)
+          buffer.write_string(data)
+          process_raw(buffer, data.length / 2)
+        end
+      end
+
+      end_utterance
+    end
+
     # Decode raw audio data.
     #
     # @param [Boolean] no_search If non-zero, perform feature extraction but don't do any

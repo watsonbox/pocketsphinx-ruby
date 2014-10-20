@@ -86,6 +86,20 @@ File.open("test.raw", "wb") do |file|
 end
 ```
 
+To open this audio file take a look at [this wiki page](https://github.com/watsonbox/pocketsphinx-ruby/wiki/Importing-raw-PCM-audio-with-Audacity).
+
+
+## Decoder
+
+The `Decoder` class uses Pocketsphinx's libpocketsphinx to decode audio data into text.
+
+```ruby
+decoder = Decoder.new(Configuration.default)
+decoder.decode 'spec/assets/audio/goforward.raw'
+
+puts decoder.hypothesis # => "go forward ten years"
+```
+
 
 ## Contributing
 

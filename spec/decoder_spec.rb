@@ -9,6 +9,22 @@ describe Decoder do
     @decoder = Decoder.new(Configuration.default)
   end
 
+  # Full integration test
+  describe '#decode' do
+    it 'correctly decodes the speech in goforward.raw' do
+      subject.decode File.open('spec/assets/audio/goforward.raw', 'rb')
+
+      # With the default configuration (no specific grammar), pocketsphinx doesn't actually
+      # get this quite right, but nonetheless this is the expected output
+      expect(subject.hypothesis).to eq("go forward ten years")
+    end
+
+    it 'accepts a file path as well as a stream' do
+      subject.decode 'spec/assets/audio/goforward.raw'
+      expect(subject.hypothesis).to eq("go forward ten years")
+    end
+  end
+
   describe '#process_raw' do
     it 'calls libpocketsphinx' do
       FFI::MemoryPointer.new(:int16, 4096) do |buffer|
