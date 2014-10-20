@@ -16,7 +16,7 @@ microphone = Microphone.new
 File.open("test_write.raw", "wb") do |file|
   microphone.record do
     FFI::MemoryPointer.new(:int16, MAX_SAMPLES) do |buffer|
-      (RECORDING_LENGTH / RECORDING_INTERVAL).times do
+      (RECORDING_LENGTH / RECORDING_INTERVAL).to_i.times do
         sample_count = microphone.read_audio(buffer, MAX_SAMPLES)
 
         # sample_count * 2 since this is length in bytes
