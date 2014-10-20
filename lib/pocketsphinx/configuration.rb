@@ -70,7 +70,7 @@ module Pocketsphinx
         raise "Configuration setting '#{name}' must be a Fixnum" unless value.respond_to?(:to_i)
         API::Sphinxbase.cmd_ln_set_int_r(@ps_config, "-#{name}", value.to_i)
       when :float
-        raise "Configuration setting '#{name}' must be a Float" unless value.respond_to?(:to_i)
+        raise "Configuration setting '#{name}' must be a Float" unless value.respond_to?(:to_f)
         API::Sphinxbase.cmd_ln_set_float_r(@ps_config, "-#{name}", value.to_f)
       when :string
         API::Sphinxbase.cmd_ln_set_str_r(@ps_config, "-#{name}", value.to_s)
