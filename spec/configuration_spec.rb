@@ -44,4 +44,37 @@ describe Configuration do
   it 'raises exceptions when a setting is unknown' do
     expect { subject['unknown'] = true }.to raise_exception "Configuration setting 'unknown' does not exist"
   end
+
+  describe '#setting_names' do
+    it 'contains the names of all possible system settings' do
+      expect(subject.setting_names.count).to eq(117)
+    end
+  end
+
+  describe '#details' do
+    it 'gives details for a single setting' do
+      expect(subject.details 'vad_threshold').to eq({
+        name: "vad_threshold",
+        type: :float,
+        default: 2.0,
+        required: false,
+        value: 2.0,
+        info: "Threshold for decision between noise and silence frames. Log-ratio between signal level and noise level."
+      })
+    end
+
+    it 'gives details for all settings when no name is specified' do
+      details = subject.details
+
+      expect(details.count).to eq(117)
+      expect(details.first).to eq({
+        name: "agc",
+        type: :string,
+        default: "none",
+        required: false,
+        value: "none",
+        info: "Automatic gain control for c0 ('max', 'emax', 'noise', or 'none')"
+      })
+    end
+  end
 end

@@ -62,6 +62,28 @@ Pocketsphinx::LiveSpeechRecognizer.new.recognize do |speech|
 end
 ```
 
+## Configuration
+
+All of Pocketsphinx's decoding settings are managed by the `Configuration` class, which can be passed into the high-level speech recognizers:
+
+```ruby
+configuration = Pocketsphinx::Configuration.default
+configuration.details('vad_threshold')
+# => {
+#   :name => "vad_threshold",
+#   :type => :float,
+#   :default => 2.0,
+#   :value => 2.0,
+#   :info => "Threshold for decision between noise and silence frames. Log-ratio between signal level and noise level."
+# }
+
+configuration['vad_threshold'] = 4
+
+Pocketsphinx::LiveSpeechRecognizer.new(configuration)
+```
+
+You can find the output of `configuration.details` [here](https://github.com/watsonbox/pocketsphinx-ruby/wiki/Default-Pocketsphinx-Configuration) for more information on the various different settings.
+
 
 ## Microphone
 

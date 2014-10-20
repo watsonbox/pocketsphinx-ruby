@@ -3,6 +3,7 @@ require 'pocketsphinx/configuration/setting_definition'
 module Pocketsphinx
   class Configuration
     attr_reader :ps_config
+    attr_reader :setting_definitions
 
     private_class_method :new
 
@@ -22,12 +23,32 @@ module Pocketsphinx
       new(API::Pocketsphinx.ps_args)
     end
 
-    def [](name)
-      unless definition = @setting_definitions[name]
-        raise "Configuration setting '#{name}' does not exist"
+    def setting_names
+      setting_definitions.keys.sort
+    end
+
+    # Get details for one or all configuration settings
+    #
+    # @param [String] name Name of setting to get details for. Gets details for all settings if nil.
+    def details(name = nil)
+      details = [name || setting_names].flatten.map do |name|
+        definition = find_definition(name)
+
+        {
+          name: name,
+          type: definition.type,
+          default: definition.default,
+          required: definition.required?,
+          value: self[name],
+          info: definition.doc
+        }
       end
 
-      case definition.type
+      name ? details.first : details
+    end
+
+    def [](name)
+      case find_definition(name).type
       when :integer
         API::Sphinxbase.cmd_ln_int_r(@ps_config, "-#{name}")
       when :float
@@ -42,11 +63,7 @@ module Pocketsphinx
     end
 
     def []=(name, value)
-      unless definition = @setting_definitions[name]
-        raise "Configuration setting '#{name}' does not exist"
-      end
-
-      case definition.type
+      case find_definition(name).type
       when :integer
         raise "Configuration setting '#{name}' must be a Fixnum" unless value.respond_to?(:to_i)
         API::Sphinxbase.cmd_ln_set_int_r(@ps_config, "-#{name}", value.to_i)
@@ -60,6 +77,12 @@ module Pocketsphinx
       when :string_list
         raise NotImplementedException
       end
+    end
+
+    private
+
+    def find_definition(name)
+      setting_definitions[name] or raise "Configuration setting '#{name}' does not exist"
     end
   end
 end

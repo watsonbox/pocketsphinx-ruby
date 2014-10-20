@@ -1,19 +1,25 @@
 module Pocketsphinx
   class Configuration
-    class SettingDefinition
+    class SettingDefinition < Struct.new(:name, :type_code, :deflt, :doc)
       TYPES = [:integer, :float, :string, :boolean, :string_list]
-
-      def initialize(name, type_code, default, doc)
-        @name, @type_code, @default, @doc = name, type_code, default, doc
-      end
 
       def type
         # Remove the required bit if it exists and find type from log2 of code
-        TYPES[Math.log2(@type_code - @type_code%2) - 1]
+        TYPES[Math.log2(type_code - type_code%2) - 1]
+      end
+
+      # Convert string defaults from pocketsphinx to Ruby types
+      def default
+        case type
+          when :integer then deflt.to_i
+          when :float then deflt.to_f
+          when :boolean then deflt == 'yes'
+          else deflt
+        end
       end
 
       def required?
-        @type_code % 2 == 1
+        type_code % 2 == 1
       end
 
       # Build setting definitions from pocketsphinx argument definitions
