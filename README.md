@@ -6,7 +6,7 @@
 
 This gem provides Ruby [FFI](https://github.com/ffi/ffi) bindings for [Pocketsphinx](https://github.com/cmusphinx/pocketsphinx), a lightweight speech recognition engine, specifically tuned for handheld and mobile devices, though it works equally well on the desktop. Pocketsphinx is part of the [CMU Sphinx](http://cmusphinx.sourceforge.net/) Open Source Toolkit For Speech Recognition.
 
-I had initially looked at using Pocketsphinx's [SWIG](http://www.swig.org/) interface for this gem, but decided in favor of FFI for many of the reasons outlined [here](https://github.com/ffi/ffi/wiki/Why-use-FFI), but most importantly ease of maintenance and JRuby support.
+Pocketsphinx's [SWIG](http://www.swig.org/) interface was initially considered for this gem, but dropped in favor of FFI for many of the reasons outlined [here](https://github.com/ffi/ffi/wiki/Why-use-FFI); most importantly ease of maintenance and JRuby support.
 
 The goal of this project is to make it as easy as possible for the Ruby community to experiment with speech recognition. Please do contribute fixes and enhancements.
 
