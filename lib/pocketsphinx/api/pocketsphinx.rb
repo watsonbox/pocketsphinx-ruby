@@ -8,6 +8,7 @@ module Pocketsphinx
       typedef :pointer, :configuration
 
       attach_function :ps_init, [:configuration], :decoder
+      attach_function :ps_reinit, [:decoder, :configuration], :int
       attach_function :ps_default_search_args, [:pointer], :void
       attach_function :ps_args, [], :pointer
       attach_function :ps_decode_raw, [:decoder, :pointer, :string, :long], :int

@@ -97,5 +97,19 @@ describe Configuration do
     it 'uses no language model' do
       expect(subject['lm']).to be_nil
     end
+
+    it 'exposes the keyphrase setting as #keyword' do
+      subject.keyword = 'Hello computer'
+
+      expect(subject.keyword).to eq('hello computer')
+      expect(subject['keyphrase']).to eq('hello computer')
+    end
+
+    it 'exposes the kws_threshold setting as #kws_threshold' do
+      subject.kws_threshold = 24
+
+      expect(subject.kws_threshold).to eq(24)
+      expect(subject['kws_threshold']).to eq(24)
+    end
   end
 end

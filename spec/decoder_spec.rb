@@ -1,27 +1,47 @@
 require 'spec_helper'
 
 describe Decoder do
-  subject { @decoder }
-  let(:ps_api) { @decoder.ps_api = double }
+  subject { Decoder.new(configuration) }
+  let(:ps_api) { subject.ps_api }
+  let(:ps_decoder) { double }
+  let(:configuration) { Configuration.default }
 
-  # Share decoder across all examples for speed
-  before :all do
-    @decoder = Decoder.new(Configuration.default)
+  before do
+    subject.ps_api = double
+    allow(ps_api).to receive(:ps_init).and_return(ps_decoder)
   end
 
-  # Full integration test
-  describe '#decode' do
-    it 'correctly decodes the speech in goforward.raw' do
-      subject.decode File.open('spec/assets/audio/goforward.raw', 'rb')
+  describe '#reconfigure' do
+    it 'calls libpocketsphinx' do
+      expect(ps_api)
+        .to receive(:ps_reinit)
+        .with(subject.ps_decoder, configuration.ps_config)
+        .and_return(0)
 
-      # With the default configuration (no specific grammar), pocketsphinx doesn't actually
-      # get this quite right, but nonetheless this is the expected output
-      expect(subject.hypothesis).to eq("go forward ten years")
+      subject.reconfigure
     end
 
-    it 'accepts a file path as well as a stream' do
-      subject.decode 'spec/assets/audio/goforward.raw'
-      expect(subject.hypothesis).to eq("go forward ten years")
+    it 'sets a new configuration if one is passed' do
+      new_config = Struct.new(:ps_config).new(:ps_config)
+
+      expect(ps_api)
+        .to receive(:ps_reinit)
+        .with(subject.ps_decoder, new_config.ps_config)
+        .and_return(0)
+
+      subject.reconfigure(new_config)
+
+      expect(subject.configuration).to be(new_config)
+    end
+
+    it 'raises an exception on error' do
+      expect(ps_api)
+        .to receive(:ps_reinit)
+        .with(subject.ps_decoder, configuration.ps_config)
+        .and_return(-1)
+
+      expect { subject.reconfigure }
+        .to raise_exception "Decoder#reconfigure failed with error code -1"
     end
   end
 

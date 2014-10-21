@@ -6,6 +6,7 @@ module Pocketsphinx
     # Recordable interface must implement #record and #read_audio
     attr_writer :recordable
     attr_writer :decoder
+    attr_writer :configuration
 
     def initialize(configuration = nil)
       @configuration = configuration
@@ -23,6 +24,19 @@ module Pocketsphinx
       @configuration ||= Configuration.default
     end
 
+    # Reinitialize the decoder with updated configuration.
+    #
+    # See Decoder#reconfigure
+    #
+    # @param [Configuration] configuration An optional new configuration to use.  If this is
+    #   nil, the previous configuration will be reloaded, with any changes applied.
+    def reconfigure(configuration = nil)
+      self.configuration = configuration if configuration
+
+      decoder.reconfigure(configuration)
+      decoder.start_utterance if recognizing?
+    end
+
     # Recognize utterances and yield hypotheses in infinite loop
     #
     # Splits speech into utterances by detecting silence between them.
@@ -32,6 +46,7 @@ module Pocketsphinx
     # @param [Fixnum] max_samples Number of samples to process at a time
     def recognize(max_samples = 4096)
       decoder.start_utterance
+      @recognizing = true
 
       recordable.record do
         FFI::MemoryPointer.new(:int16, max_samples) do |buffer|
@@ -49,11 +64,17 @@ module Pocketsphinx
           end
         end
       end
+    ensure
+      @recognizing = false
     end
 
     def in_speech?
       # Use Pocketsphinx's implementation by default
       decoder.in_speech?
+    end
+
+    def recognizing?
+      @recognizing == true
     end
 
     private
