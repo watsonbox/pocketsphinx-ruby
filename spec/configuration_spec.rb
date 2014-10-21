@@ -4,7 +4,7 @@ describe Configuration do
   subject { Pocketsphinx::Configuration.default }
 
   it "provides a default pocketsphinx configuration" do
-    expect(subject).to be_a(Pocketsphinx::Configuration)
+    expect(subject).to be_a(Pocketsphinx::Configuration::Default)
   end
 
   it "supports integer settings" do
@@ -84,6 +84,18 @@ describe Configuration do
         value: "none",
         info: "Automatic gain control for c0 ('max', 'emax', 'noise', or 'none')"
       })
+    end
+  end
+
+  context 'keyword spotting configuration' do
+    subject { Configuration::KeywordSpotting.new('Okay computer') }
+
+    it 'sets the lowercase keyphrase' do
+      expect(subject['keyphrase']).to eq('okay computer')
+    end
+
+    it 'uses no language model' do
+      expect(subject['lm']).to be_nil
     end
   end
 end

@@ -136,6 +136,18 @@ puts decoder.hypothesis # => "go forward ten years"
 ```
 
 
+## Keyword Spotting
+
+Keyword spotting is another feature that is not in the current stable (0.8) releases of Pocketsphinx, having been [merged into trunk](https://github.com/cmusphinx/pocketsphinx/commit/f562f9356cc7f1ade4941ebdde0c377642a023e3) early in 2014. In can be useful for detecting an activation keyword in a command and control application, ignoring all other speech. Set up a recognizer as follows:
+
+```ruby
+configuration = Configuration::KeywordSpotting.new('Okay computer')
+recognizer = LiveSpeechRecognizer.new(configuration)
+```
+
+The `KeywordSpotting` accepts a second argument for adjusting the sensitivity of the keyword detection. Note that this is just a wrapper which sets the `keyphrase` and `kws_threshold` settings on the default configuration.
+
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/pocketsphinx-ruby/fork )

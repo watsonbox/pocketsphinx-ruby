@@ -41,7 +41,8 @@ module Pocketsphinx
                 process_audio(buffer, max_samples) or break
               end
 
-              yield get_hypothesis
+              hypothesis = get_hypothesis
+              yield hypothesis if hypothesis
             else
               process_audio(buffer, max_samples) or break
             end

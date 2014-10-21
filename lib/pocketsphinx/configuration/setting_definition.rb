@@ -1,5 +1,5 @@
 module Pocketsphinx
-  class Configuration
+  module Configuration
     class SettingDefinition < Struct.new(:name, :type_code, :deflt, :doc)
       TYPES = [:integer, :float, :string, :boolean, :string_list]
 

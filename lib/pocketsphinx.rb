@@ -1,11 +1,18 @@
 require 'ffi'
 
 require "pocketsphinx/version"
+
+# Pocketsphinx FFI API
 require "pocketsphinx/api/sphinxbase"
 require "pocketsphinx/api/sphinxad"
 require "pocketsphinx/api/pocketsphinx"
 
-require "pocketsphinx/configuration"
+# Configuration
+require 'pocketsphinx/configuration/setting_definition'
+require "pocketsphinx/configuration/base"
+require "pocketsphinx/configuration/default"
+require "pocketsphinx/configuration/keyword_spotting"
+
 require "pocketsphinx/audio_file"
 require "pocketsphinx/microphone"
 require "pocketsphinx/decoder"
