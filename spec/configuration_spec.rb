@@ -38,7 +38,7 @@ describe Configuration do
   end
 
   it 'raises exceptions when setting with incorrectly typed values' do
-    expect { subject['frate'] = true }.to raise_exception "Configuration setting 'frate' must be a Fixnum"
+    expect { subject['frate'] = true }.to raise_exception "Configuration setting 'frate' must be of type Integer"
   end
 
   it 'raises exceptions when a setting is unknown' do

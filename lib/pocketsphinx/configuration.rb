@@ -65,12 +65,12 @@ module Pocketsphinx
 
     # Set a configuration setting with type checking
     def []=(name, value)
-      case find_definition(name).type
+      check_type(name, type = find_definition(name).type, value)
+
+      case type
       when :integer
-        raise "Configuration setting '#{name}' must be a Fixnum" unless value.respond_to?(:to_i)
         API::Sphinxbase.cmd_ln_set_int_r(@ps_config, "-#{name}", value.to_i)
       when :float
-        raise "Configuration setting '#{name}' must be a Float" unless value.respond_to?(:to_f)
         API::Sphinxbase.cmd_ln_set_float_r(@ps_config, "-#{name}", value.to_f)
       when :string
         API::Sphinxbase.cmd_ln_set_str_r(@ps_config, "-#{name}", value.to_s)
@@ -85,6 +85,17 @@ module Pocketsphinx
 
     def find_definition(name)
       setting_definitions[name] or raise "Configuration setting '#{name}' does not exist"
+    end
+
+    def check_type(name, expected_type, value)
+      conversion_method = case expected_type
+        when :integer then :to_i
+        when :float then :to_f
+      end
+
+      if conversion_method && !value.respond_to?(conversion_method)
+        raise "Configuration setting '#{name}' must be of type #{expected_type.to_s.capitalize}"
+      end
     end
   end
 end
