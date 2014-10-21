@@ -79,6 +79,12 @@ describe Microphone do
     end
   end
 
+  describe '#read_audio_delay' do
+    it 'should be 0.128 seconds for a max_samples of 4096 and sample rate of 16kHz' do
+      expect(subject.read_audio_delay(4096)).to eq(0.128)
+    end
+  end
+
   describe '#close_device' do
     it 'calls libsphinxad' do
       expect(ps_api)

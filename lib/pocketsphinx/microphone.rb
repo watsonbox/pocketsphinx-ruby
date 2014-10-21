@@ -65,7 +65,7 @@ module Pocketsphinx
     #
     # @param [Fixnum] max_samples The maximum samples we tried to read from the audio device
     def read_audio_delay(max_samples = 4096)
-      max_samples / (2 * sample_rate)
+      max_samples.to_f / (2 * sample_rate)
     end
 
     def close_device
