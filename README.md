@@ -50,7 +50,7 @@ Or install it yourself as:
     $ gem install pocketsphinx-ruby
 
 
-## Basic Usage
+## Usage
 
 The `LiveSpeechRecognizer` is modeled on the same class in [Sphinx4](http://cmusphinx.sourceforge.net/wiki/tutorialsphinx4). It uses the `Microphone` and `Decoder` classes internally to provide a simple, high-level recognition interface:
 
@@ -75,7 +75,7 @@ end
 These two classes split speech into utterances by detecting silence between them. By default this uses Pocketsphinx's internal Voice Activity Detection (VAD) which can be configured by adjusting the `vad_postspeech`, `vad_prespeech`, and `vad_threshold` configuration settings.
 
 
-## Configuration
+### Configuration
 
 All of Pocketsphinx's decoding settings are managed by the `Configuration` class, which can be passed into the high-level speech recognizers:
 
@@ -98,7 +98,7 @@ Pocketsphinx::LiveSpeechRecognizer.new(configuration)
 You can find the output of `configuration.details` [here](https://github.com/watsonbox/pocketsphinx-ruby/wiki/Default-Pocketsphinx-Configuration) for more information on the various different settings.
 
 
-## Microphone
+### Microphone
 
 The `Microphone` class uses Pocketsphinx's libsphinxad to record audio for speech recognition. For desktop applications this should normally be 16bit/16kHz raw PCM audio, so these are the default settings. The exact audio backend depends on [what was selected](https://github.com/cmusphinx/sphinxbase/blob/master/configure.in#L138) when libsphinxad was built. On OSX, OpenAL is [now supported](https://github.com/cmusphinx/sphinxbase/commit/5cc55c4721273681200e1f754ff0798ac073b950) and should work just fine.
 
@@ -124,7 +124,7 @@ end
 To open this audio file take a look at [this wiki page](https://github.com/watsonbox/pocketsphinx-ruby/wiki/Importing-raw-PCM-audio-with-Audacity).
 
 
-## Decoder
+### Decoder
 
 The `Decoder` class uses Pocketsphinx's libpocketsphinx to decode audio data into text. For example to decode a single utterance:
 
@@ -136,16 +136,16 @@ puts decoder.hypothesis # => "go forward ten years"
 ```
 
 
-## Keyword Spotting
+### Keyword Spotting
 
-Keyword spotting is another feature that is not in the current stable (0.8) releases of Pocketsphinx, having been [merged into trunk](https://github.com/cmusphinx/pocketsphinx/commit/f562f9356cc7f1ade4941ebdde0c377642a023e3) early in 2014. In can be useful for detecting an activation keyword in a command and control application, ignoring all other speech. Set up a recognizer as follows:
+Keyword spotting is another feature that is not in the current stable (0.8) releases of Pocketsphinx, having been [merged into trunk](https://github.com/cmusphinx/pocketsphinx/commit/f562f9356cc7f1ade4941ebdde0c377642a023e3) early in 2014. In can be useful for detecting an activation keyword in a command and control application, while ignoring all other speech. Set up a recognizer as follows:
 
 ```ruby
 configuration = Configuration::KeywordSpotting.new('Okay computer')
 recognizer = LiveSpeechRecognizer.new(configuration)
 ```
 
-The `KeywordSpotting` accepts a second argument for adjusting the sensitivity of the keyword detection. Note that this is just a wrapper which sets the `keyphrase` and `kws_threshold` settings on the default configuration.
+The `KeywordSpotting` configuration accepts a second argument for adjusting the sensitivity of the keyword detection. Note that this is just a wrapper which sets the `keyphrase` and `kws_threshold` settings on the default configuration.
 
 
 ## Contributing
