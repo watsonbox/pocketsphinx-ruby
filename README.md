@@ -3,6 +3,7 @@
 [![Build Status](http://img.shields.io/travis/watsonbox/pocketsphinx-ruby.svg?style=flat)](https://travis-ci.org/watsonbox/pocketsphinx-ruby)
 [![Code Climate](http://img.shields.io/codeclimate/github/watsonbox/pocketsphinx-ruby/badges/gpa.svg?style=flat)](https://codeclimate.com/github/watsonbox/pocketsphinx-ruby)
 [![Coverage Status](https://img.shields.io/coveralls/watsonbox/pocketsphinx-ruby.svg?style=flat)](https://coveralls.io/r/watsonbox/pocketsphinx-ruby)
+[![Yard Docs](http://img.shields.io/badge/yard-docs-blue.svg?style=flat)](http://www.rubydoc.info/gems/pocketsphinx-ruby/frames)
 
 This gem provides Ruby [FFI](https://github.com/ffi/ffi) bindings for [Pocketsphinx](https://github.com/cmusphinx/pocketsphinx), a lightweight speech recognition engine, specifically tuned for handheld and mobile devices, though it works equally well on the desktop. Pocketsphinx is part of the [CMU Sphinx](http://cmusphinx.sourceforge.net/) Open Source Toolkit For Speech Recognition.
 
