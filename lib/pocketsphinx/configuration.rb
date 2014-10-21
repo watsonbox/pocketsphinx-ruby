@@ -73,7 +73,7 @@ module Pocketsphinx
       when :float
         API::Sphinxbase.cmd_ln_set_float_r(@ps_config, "-#{name}", value.to_f)
       when :string
-        API::Sphinxbase.cmd_ln_set_str_r(@ps_config, "-#{name}", value.to_s)
+        API::Sphinxbase.cmd_ln_set_str_r(@ps_config, "-#{name}", (value.to_s if value))
       when :boolean
         API::Sphinxbase.cmd_ln_set_int_r(@ps_config, "-#{name}", value ? 1 : 0)
       when :string_list
@@ -95,6 +95,10 @@ module Pocketsphinx
 
       if conversion_method && !value.respond_to?(conversion_method)
         raise "Configuration setting '#{name}' must be of type #{expected_type.to_s.capitalize}"
+      end
+
+      if value.nil? && expected_type != :string
+        raise "Only string settings can be set to nil"
       end
     end
   end

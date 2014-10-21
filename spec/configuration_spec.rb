@@ -13,6 +13,8 @@ describe Configuration do
 
     subject['frate'] = 50
     expect(subject['frate']).to eq(50)
+
+    expect { subject['frate'] = nil }.to raise_exception "Only string settings can be set to nil"
   end
 
   it "supports float settings" do
@@ -21,20 +23,27 @@ describe Configuration do
 
     subject['samprate'] = 8000
     expect(subject['samprate']).to eq(8000)
+
+    expect { subject['samprate'] = nil }.to raise_exception "Only string settings can be set to nil"
   end
 
-  it "supports getting strings" do
+  it "supports string settings" do
     expect(subject['warp_type']).to eq('inverse_linear')
 
     subject['warp_type'] = 'different_type'
     expect(subject['warp_type']).to eq('different_type')
+
+    subject['warp_type'] = nil
+    expect(subject['warp_type']).to eq(nil)
   end
 
-  it "supports getting booleans" do
+  it "supports boolean settings" do
     expect(subject['smoothspec']).to eq(false)
 
     subject['smoothspec'] = true
     expect(subject['smoothspec']).to eq(true)
+
+    expect { subject['smoothspec'] = nil }.to raise_exception "Only string settings can be set to nil"
   end
 
   it 'raises exceptions when setting with incorrectly typed values' do
