@@ -56,7 +56,7 @@ Or install it yourself as:
 The `LiveSpeechRecognizer` is modeled on the same class in [Sphinx4](http://cmusphinx.sourceforge.net/wiki/tutorialsphinx4). It uses the `Microphone` and `Decoder` classes internally to provide a simple, high-level recognition interface:
 
 ```ruby
-require 'pocketsphinx-ruby'
+require 'pocketsphinx-ruby' # Omitted in subsequent examples
 
 Pocketsphinx::LiveSpeechRecognizer.new.recognize do |speech|
   puts speech
@@ -106,7 +106,7 @@ The `Microphone` class uses Pocketsphinx's libsphinxad to record audio for speec
 For example, to record and save a 5 second raw audio file:
 
 ```ruby
-microphone = Microphone.new
+microphone = Pocketsphinx::Microphone.new
 
 File.open("test.raw", "wb") do |file|
   microphone.record do
@@ -130,7 +130,7 @@ To open this audio file take a look at [this wiki page](https://github.com/watso
 The `Decoder` class uses Pocketsphinx's libpocketsphinx to decode audio data into text. For example to decode a single utterance:
 
 ```ruby
-decoder = Decoder.new(Configuration.default)
+decoder = Pocketsphinx::Decoder.new(Pocketsphinx::Configuration.default)
 decoder.decode 'spec/assets/audio/goforward.raw'
 
 puts decoder.hypothesis # => "go forward ten years"
@@ -142,11 +142,29 @@ puts decoder.hypothesis # => "go forward ten years"
 Keyword spotting is another feature that is not in the current stable (0.8) releases of Pocketsphinx, having been [merged into trunk](https://github.com/cmusphinx/pocketsphinx/commit/f562f9356cc7f1ade4941ebdde0c377642a023e3) early in 2014. In can be useful for detecting an activation keyword in a command and control application, while ignoring all other speech. Set up a recognizer as follows:
 
 ```ruby
-configuration = Configuration::KeywordSpotting.new('Okay computer')
-recognizer = LiveSpeechRecognizer.new(configuration)
+configuration = Pocketsphinx::Configuration::KeywordSpotting.new('Okay computer')
+recognizer = Pocketsphinx::LiveSpeechRecognizer.new(configuration)
 ```
 
-The `KeywordSpotting` configuration accepts a second argument for adjusting the sensitivity of the keyword detection. Note that this is just a wrapper which sets the `keyphrase` and `kws_threshold` settings on the default configuration.
+The `KeywordSpotting` configuration accepts a second argument for adjusting the sensitivity of the keyword detection. Note that this is just a wrapper which sets the `keyphrase` and `kws_threshold` settings on the default configuration:
+
+```ruby
+Pocketsphinx::Configuration::KeywordSpotting.new('keyword', 2).changes
+# => [
+#   { :name => "keyphrase", :type => :string, :default => nil, :required => false, :value => "keyword", :info => "Keyphrase to spot" },
+#   { :name => "kws_threshold", :type => :float, :default => 1.0, :required => false, :value => 2.0, :info => "Threshold for p(hyp)/p(alternatives) ratio" },
+#   { :name => "lm", :type => :string, :default => "/usr/local/Cellar/cmu-pocketsphinx/HEAD/share/pocketsphinx/model/lm/en_US/hub4.5000.DMP", :required => false, :value => nil, :info => "Word trigram language model input file" }
+# ]
+```
+
+
+## Troubleshooting
+
+This gem has been tested with a manual Pocketsphinx installation on Ubuntu 14.04 and a Homebrew Pocketsphinx installation on OSX 10.9.4 Mavericks. Take a look at the following common problems before opening an issue.
+
+**`attach_function': Function 'ps_default_search_args' not found in [libpocketsphinx.so] (FFI::NotFoundError)**
+
+An error like this probably means that you have an old version of the Pocketsphinx libraries installed. If necessary, replace them with a recent development version which supports the features available in this gem.
 
 
 ## Contributing
