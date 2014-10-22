@@ -90,12 +90,16 @@ describe Configuration do
   context 'keyword spotting configuration' do
     subject { Configuration::KeywordSpotting.new('Okay computer') }
 
-    it 'sets the lowercase keyphrase' do
-      expect(subject['keyphrase']).to eq('okay computer')
-    end
+    it 'modifies the default configuration keyphrase and language model' do
+      changes = subject.changes
 
-    it 'uses no language model' do
-      expect(subject['lm']).to be_nil
+      expect(changes.count).to be(2)
+
+      expect(changes[0][:name]).to eq('keyphrase')
+      expect(changes[0][:value]).to eq('okay computer')
+
+      expect(changes[1][:name]).to eq('lm')
+      expect(changes[1][:value]).to be_nil
     end
 
     it 'exposes the keyphrase setting as #keyword' do
