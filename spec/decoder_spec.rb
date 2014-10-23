@@ -12,11 +12,17 @@ describe Decoder do
   end
 
   describe '#reconfigure' do
-    it 'calls libpocketsphinx' do
+    it 'calls libpocketsphinx and the configuration post initialize hook' do
       expect(ps_api)
         .to receive(:ps_reinit)
         .with(subject.ps_decoder, configuration.ps_config)
         .and_return(0)
+
+      configuration.define_singleton_method(:post_init_decoder) { |decoder| }
+
+      expect(configuration)
+        .to receive(:post_init_decoder)
+        .with(subject)
 
       subject.reconfigure
     end
@@ -131,6 +137,76 @@ describe Decoder do
         .and_return("Hypothesis")
 
       expect(subject.hypothesis).to eq("Hypothesis")
+    end
+  end
+
+  describe '#set_jsgf_string' do
+    it 'calls libpocketsphinx' do
+      expect(ps_api)
+        .to receive(:ps_set_jsgf_string)
+        .with(subject.ps_decoder, 'default', 'JSGF')
+        .and_return(0)
+
+      subject.set_jsgf_string('JSGF')
+    end
+
+    it 'raises an exception on error' do
+      expect(ps_api)
+        .to receive(:ps_set_jsgf_string)
+        .and_return(-1)
+
+      expect { subject.set_jsgf_string('JSGF') }
+        .to raise_exception "Decoder#set_jsgf_string failed with error code -1"
+    end
+  end
+
+  describe '#set_search' do
+    it 'calls libpocketsphinx' do
+      expect(ps_api)
+        .to receive(:ps_set_search)
+        .with(subject.ps_decoder, 'search')
+        .and_return(0)
+
+      subject.set_search('search')
+    end
+
+    it 'raises an exception on error' do
+      expect(ps_api)
+        .to receive(:ps_set_search)
+        .and_return(-1)
+
+      expect { subject.set_search('search') }
+        .to raise_exception "Decoder#set_search failed with error code -1"
+    end
+  end
+
+  describe '#unset_search' do
+    it 'calls libpocketsphinx' do
+      expect(ps_api)
+        .to receive(:ps_unset_search)
+        .with(subject.ps_decoder, 'search')
+        .and_return(0)
+
+      subject.unset_search('search')
+    end
+
+    it 'raises an exception on error' do
+      expect(ps_api)
+        .to receive(:ps_unset_search)
+        .and_return(-1)
+
+      expect { subject.unset_search('search') }
+        .to raise_exception "Decoder#unset_search failed with error code -1"
+    end
+  end
+
+  describe '#get_search' do
+    it 'calls libpocketsphinx' do
+      expect(ps_api)
+        .to receive(:ps_get_search)
+        .and_return(:search)
+
+      expect(subject.get_search).to eq(:search)
     end
   end
 end

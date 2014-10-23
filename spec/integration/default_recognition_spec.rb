@@ -1,11 +1,8 @@
 require 'spec_helper'
 
-describe SpeechRecognizer do
-  let(:recordable) { AudioFile.new('spec/assets/audio/goforward.raw') }
-
+describe 'speech recognition with default configuration' do
   subject do
-    SpeechRecognizer.new.tap do |speech_recognizer|
-      speech_recognizer.recordable = recordable
+    AudioFileSpeechRecognizer.new.tap do |speech_recognizer|
       speech_recognizer.decoder = @decoder
     end
   end
@@ -17,7 +14,8 @@ describe SpeechRecognizer do
 
   describe '#recognize' do
     it 'should decode speech in raw audio' do
-      expect { |b| subject.recognize(4096, &b) }.to yield_with_args("go forward ten years")
+      expect { |b| subject.recognize('spec/assets/audio/goforward.raw', 4096, &b) }.
+        to yield_with_args("go forward ten years")
     end
   end
 end

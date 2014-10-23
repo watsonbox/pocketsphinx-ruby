@@ -13,10 +13,7 @@ module Pocketsphinx
     #   nil, the previous configuration will be reloaded, with any changes applied.
     def reconfigure(configuration = nil)
       self.configuration = configuration if configuration
-
-      ps_api.ps_reinit(ps_decoder, self.configuration.ps_config).tap do |result|
-        raise Error, "Decoder#reconfigure failed with error code #{result}" if result < 0
-      end
+      reinit_decoder
     end
 
     # Decode a raw audio stream as a single utterance, opening a file if path given
@@ -102,12 +99,70 @@ module Pocketsphinx
       ps_api.ps_get_hyp(ps_decoder, nil, nil)
     end
 
+    # Adds new search using JSGF model.
+    #
+    # Convenience method to parse JSGF model from string and create a search.
+    #
+    # @param [String] jsgf_string The JSGF grammar
+    # @param [String] name The search name
+    def set_jsgf_string(jsgf_string, name = 'default')
+      ps_api.ps_set_jsgf_string(ps_decoder, name, jsgf_string).tap do |result|
+        raise Error, "Decoder#set_jsgf_string failed with error code #{result}" if result < 0
+      end
+    end
+
+    # Returns name of curent search in decoder
+    def get_search
+      ps_api.ps_get_search(ps_decoder)
+    end
+
+    # Actives search with the provided name.
+    #
+    # Activates search with the provided name. The search must be added before
+    # using either ps_set_fsg(), ps_set_lm() or ps_set_kws().
+    def set_search(name = 'default')
+      ps_api.ps_set_search(ps_decoder, name).tap do |result|
+        raise Error, "Decoder#set_search failed with error code #{result}" if result < 0
+      end
+    end
+
+    # Unsets the search and releases related resources.
+    #
+    # Unsets the search previously added with
+    # using either ps_set_fsg(), ps_set_lm() or ps_set_kws().
+    def unset_search(name = 'default')
+      ps_api.ps_unset_search(ps_decoder, name).tap do |result|
+        raise Error, "Decoder#unset_search failed with error code #{result}" if result < 0
+      end
+    end
+
     def ps_api
       @ps_api || API::Pocketsphinx
     end
 
     def ps_decoder
-      @ps_decoder ||= ps_api.ps_init(configuration.ps_config)
+      init_decoder if @ps_decoder.nil?
+      @ps_decoder
+    end
+
+    private
+
+    def init_decoder
+      @ps_decoder = ps_api.ps_init(configuration.ps_config)
+      post_init_decoder
+    end
+
+    def reinit_decoder
+      ps_api.ps_reinit(ps_decoder, configuration.ps_config).tap do |result|
+        raise Error, "Decoder#reconfigure failed with error code #{result}" if result < 0
+        post_init_decoder
+      end
+    end
+
+    def post_init_decoder
+      if configuration.respond_to?(:post_init_decoder)
+        configuration.post_init_decoder(self)
+      end
     end
   end
 end
