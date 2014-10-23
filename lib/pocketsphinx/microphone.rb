@@ -3,7 +3,7 @@ module Pocketsphinx
   #
   # Implements Recordable interface (#record and #read_audio)
   class Microphone
-    Error = Class.new(StandardError)
+    include API::CallHelpers
 
     attr_reader :ps_audio_device
     attr_writer :ps_api
@@ -36,15 +36,11 @@ module Pocketsphinx
     end
 
     def start_recording
-      ps_api.ad_start_rec(@ps_audio_device).tap do |result|
-        raise Error, "Microphone#start_recording failed with error code #{result}" if result < 0
-      end
+      api_call :ad_start_rec, @ps_audio_device
     end
 
     def stop_recording
-      ps_api.ad_stop_rec(@ps_audio_device).tap do |result|
-        raise Error, "Microphone#stop_recording failed with error code #{result}" if result < 0
-      end
+      api_call :ad_stop_rec, @ps_audio_device
     end
 
     # Read next block of audio samples while recording; read upto max samples into buf.
@@ -69,9 +65,7 @@ module Pocketsphinx
     end
 
     def close_device
-      ps_api.ad_close(@ps_audio_device).tap do |result|
-        raise Error, "Microphone#close_device failed with error code #{result}" if result < 0
-      end
+      api_call :ad_close, @ps_audio_device
     end
 
     def ps_api

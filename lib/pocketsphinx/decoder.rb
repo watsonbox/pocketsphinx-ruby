@@ -1,6 +1,6 @@
 module Pocketsphinx
   class Decoder < Struct.new(:configuration)
-    Error = Class.new(StandardError)
+    include API::CallHelpers
 
     attr_writer :ps_api
 
@@ -61,9 +61,7 @@ module Pocketsphinx
     #   worth of data.  This may allow the recognizer to produce more accurate results.
     # @return Number of frames of data searched
     def process_raw(buffer, size, no_search = false, full_utt = false)
-      ps_api.ps_process_raw(ps_decoder, buffer, size, no_search ? 1 : 0, full_utt ? 1 : 0).tap do |result|
-        raise Error, "Decoder#process_raw failed with error code #{result}" if result < 0
-      end
+      api_call :ps_process_raw, ps_decoder, buffer, size, no_search ? 1 : 0, full_utt ? 1 : 0
     end
 
     # Start utterance processing.
@@ -74,16 +72,12 @@ module Pocketsphinx
     #
     # @param [String] name String uniquely identifying this utterance. If nil, one will be created.
     def start_utterance(name = nil)
-      ps_api.ps_start_utt(ps_decoder, name).tap do |result|
-        raise Error, "Decoder#start_utterance failed with error code #{result}" if result < 0
-      end
+      api_call :ps_start_utt, ps_decoder, name
     end
 
     # End utterance processing
     def end_utterance
-      ps_api.ps_end_utt(ps_decoder).tap do |result|
-        raise Error, "Decoder#end_utterance failed with error code #{result}" if result < 0
-      end
+      api_call :ps_end_utt, ps_decoder
     end
 
     # Checks if the last feed audio buffer contained speech
@@ -106,9 +100,7 @@ module Pocketsphinx
     # @param [String] jsgf_string The JSGF grammar
     # @param [String] name The search name
     def set_jsgf_string(jsgf_string, name = 'default')
-      ps_api.ps_set_jsgf_string(ps_decoder, name, jsgf_string).tap do |result|
-        raise Error, "Decoder#set_jsgf_string failed with error code #{result}" if result < 0
-      end
+      api_call :ps_set_jsgf_string, ps_decoder, name, jsgf_string
     end
 
     # Returns name of curent search in decoder
@@ -121,9 +113,7 @@ module Pocketsphinx
     # Activates search with the provided name. The search must be added before
     # using either ps_set_fsg(), ps_set_lm() or ps_set_kws().
     def set_search(name = 'default')
-      ps_api.ps_set_search(ps_decoder, name).tap do |result|
-        raise Error, "Decoder#set_search failed with error code #{result}" if result < 0
-      end
+      api_call :ps_set_search, ps_decoder, name
     end
 
     # Unsets the search and releases related resources.
@@ -131,9 +121,7 @@ module Pocketsphinx
     # Unsets the search previously added with
     # using either ps_set_fsg(), ps_set_lm() or ps_set_kws().
     def unset_search(name = 'default')
-      ps_api.ps_unset_search(ps_decoder, name).tap do |result|
-        raise Error, "Decoder#unset_search failed with error code #{result}" if result < 0
-      end
+      api_call :ps_unset_search, ps_decoder, name
     end
 
     def ps_api
@@ -154,7 +142,7 @@ module Pocketsphinx
 
     def reinit_decoder
       ps_api.ps_reinit(ps_decoder, configuration.ps_config).tap do |result|
-        raise Error, "Decoder#reconfigure failed with error code #{result}" if result < 0
+        raise API::Error, "Decoder#reconfigure failed with error code #{result}" if result < 0
         post_init_decoder
       end
     end
