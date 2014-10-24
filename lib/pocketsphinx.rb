@@ -10,6 +10,7 @@ require "pocketsphinx/api/call_helpers"
 
 # Grammar
 require "pocketsphinx/grammar/jsgf"
+require "pocketsphinx/grammar/jsgf_builder"
 
 # Configuration
 require "pocketsphinx/configuration/setting_definition"
