@@ -158,6 +158,26 @@ Pocketsphinx::Configuration::KeywordSpotting.new('keyword', 2).changes
 ```
 
 
+### Grammars
+
+Another way of configuring Pocketsphinx is with a grammar, which is normally used to describe very simple types of languages for command and control. Restricting the set of possible utterances in this way can greatly improve recognition accuracy for these types of application.
+
+Load a [JSGF](http://www.w3.org/TR/jsgf/) grammar from a file:
+
+```ruby
+configuration = Pocketsphinx::Configuration::Grammar.new('sentences.gram')
+```
+
+Or build one dynamically with this simple DSL (currently only supports sentence lists):
+
+```ruby
+configuration = Pocketsphinx::Configuration::Grammar.new do
+  sentence "Go forward ten meters"
+  sentence "Go backward ten meters"
+end
+```
+
+
 ## Troubleshooting
 
 This gem has been tested with a manual Pocketsphinx installation on Ubuntu 14.04 and a Homebrew Pocketsphinx installation on OSX 10.9.4 Mavericks. Take a look at the following common problems before opening an issue.
