@@ -27,5 +27,7 @@ require "pocketsphinx/live_speech_recognizer"
 require "pocketsphinx/audio_file_speech_recognizer"
 
 module Pocketsphinx
-
+  def self.disable_logging
+    API::Sphinxbase.err_set_logfp(nil)
+  end
 end

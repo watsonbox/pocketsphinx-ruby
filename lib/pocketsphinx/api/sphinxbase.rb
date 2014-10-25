@@ -21,6 +21,7 @@ module Pocketsphinx
       attach_function :cmd_ln_set_str_r, [:pointer, :string, :string], :void
       attach_function :err_set_debug_level, [:int], :int
       attach_function :err_set_logfile, [:string], :int
+      attach_function :err_set_logfp, [:pointer], :void
     end
   end
 end
