@@ -46,6 +46,15 @@ describe Configuration do
     expect { subject['smoothspec'] = nil }.to raise_exception "Only string settings can be set to nil"
   end
 
+  it "does not support string lists" do
+    subject.setting_definitions['string_list_setting'] = Configuration::SettingDefinition.new(
+      'string_list_setting', 32, nil, nil
+    )
+
+    expect { subject['string_list_setting'] }.to raise_exception NotImplementedError
+    expect { subject['string_list_setting'] = 'value' }.to raise_exception NotImplementedError
+  end
+
   it 'raises exceptions when setting with incorrectly typed values' do
     expect { subject['frate'] = true }.to raise_exception "Configuration setting 'frate' must be of type Integer"
   end

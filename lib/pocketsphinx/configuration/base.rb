@@ -48,7 +48,7 @@ module Pocketsphinx
         when :boolean
           API::Sphinxbase.cmd_ln_int_r(ps_config, "-#{name}") != 0
         when :string_list
-          raise NotImplementedException
+          raise NotImplementedError
         end
       end
 
@@ -66,7 +66,7 @@ module Pocketsphinx
         when :boolean
           API::Sphinxbase.cmd_ln_set_int_r(ps_config, "-#{name}", value ? 1 : 0)
         when :string_list
-          raise NotImplementedException
+          raise NotImplementedError
         end
       end
 
