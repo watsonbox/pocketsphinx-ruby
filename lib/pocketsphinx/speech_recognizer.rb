@@ -3,7 +3,7 @@ module Pocketsphinx
   #
   # Essentially orchestrates interaction between Recordable and Decoder, and detects new utterances.
   class SpeechRecognizer
-    # Recordable interface must implement #record and #read_audio
+    # Recordable interface must implement #start_recording, #stop_recording and #read_audio
     attr_writer :recordable
     attr_writer :decoder
     attr_writer :configuration
@@ -33,8 +33,9 @@ module Pocketsphinx
     def reconfigure(configuration = nil)
       self.configuration = configuration if configuration
 
-      decoder.reconfigure(configuration)
-      decoder.start_utterance if recognizing?
+      pause do
+        decoder.reconfigure(configuration)
+      end
     end
 
     # Recognize utterances and yield hypotheses in infinite loop
@@ -45,27 +46,24 @@ module Pocketsphinx
     #
     # @param [Fixnum] max_samples Number of samples to process at a time
     def recognize(max_samples = 4096)
-      decoder.start_utterance
-      @recognizing = true
+      start unless recognizing?
 
-      recordable.record do
-        FFI::MemoryPointer.new(:int16, max_samples) do |buffer|
-          loop do
-            if in_speech?
-              while decoder.in_speech?
-                process_audio(buffer, max_samples) or break
-              end
-
-              hypothesis = get_hypothesis
-              yield hypothesis if hypothesis
-            else
+      FFI::MemoryPointer.new(:int16, max_samples) do |buffer|
+        loop do
+          if in_speech?
+            while in_speech?
               process_audio(buffer, max_samples) or break
             end
+
+            hypothesis = get_hypothesis
+            yield hypothesis if hypothesis
+          else
+            process_audio(buffer, max_samples) or break
           end
         end
       end
     ensure
-      @recognizing = false
+      stop
     end
 
     def in_speech?
@@ -75,6 +73,26 @@ module Pocketsphinx
 
     def recognizing?
       @recognizing == true
+    end
+
+    def pause
+      recognizing?.tap do |was_recognizing|
+        stop if was_recognizing
+        yield
+        start if was_recognizing
+      end
+    end
+
+    def start
+      decoder.start_utterance
+      recordable.start_recording
+      @recognizing = true
+    end
+
+    def stop
+      decoder.end_utterance
+      recordable.stop_recording
+      @recognizing = false
     end
 
     private

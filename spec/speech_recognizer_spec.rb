@@ -30,9 +30,13 @@ describe SpeechRecognizer do
       subject.reconfigure(:new_configuration)
     end
 
-    it 'restarts an utterance if recognition was interrupted' do
-      expect(subject).to receive(:recognizing?).and_return(true)
-      expect(decoder).to receive(:start_utterance)
+    it 'restarts recognition if it was interrupted' do
+      allow(subject).to receive(:recognizing?).and_return(true)
+
+      expect(decoder).to receive(:end_utterance).ordered
+      expect(recordable).to receive(:stop_recording).ordered
+      expect(decoder).to receive(:start_utterance).ordered
+      expect(recordable).to receive(:start_recording).ordered
 
       subject.reconfigure
     end

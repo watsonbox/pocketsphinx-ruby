@@ -1,7 +1,7 @@
 module Pocketsphinx
   # Provides non-blocking live audio recording using libsphinxad
   #
-  # Implements Recordable interface (#record and #read_audio)
+  # Implements Recordable interface (#start_recording, #stop_recording and #read_audio)
   class Microphone
     include API::CallHelpers
 
