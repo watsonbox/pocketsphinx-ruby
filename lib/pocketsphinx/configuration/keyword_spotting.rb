@@ -27,6 +27,11 @@ module Pocketsphinx
         self['kws_threshold'] = value
       end
 
+      # See SpeechRecognizer#algorithm
+      def recognition_algorithm
+        :continuous
+      end
+
       private
 
       def sanitize_keyword(keyword)

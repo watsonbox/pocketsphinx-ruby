@@ -8,6 +8,8 @@ module Pocketsphinx
     attr_writer :decoder
     attr_writer :configuration
 
+    ALGORITHMS = [:after_speech, :continuous]
+
     def initialize(configuration = nil)
       @configuration = configuration
     end
@@ -38,28 +40,19 @@ module Pocketsphinx
       end
     end
 
-    # Recognize utterances and yield hypotheses in infinite loop
-    #
-    # Splits speech into utterances by detecting silence between them.
-    # By default this uses Pocketsphinx's internal Voice Activity Detection (VAD) which can be
-    # configured by adjusting the `vad_postspeech`, `vad_prespeech`, and `vad_threshold` settings.
+    # Recognize speech and yield hypotheses in infinite loop
     #
     # @param [Fixnum] max_samples Number of samples to process at a time
-    def recognize(max_samples = 4096)
+    def recognize(max_samples = 4096, &b)
+      unless ALGORITHMS.include?(algorithm)
+        raise NotImplementedError, "Unknown speech recognition algorithm: #{algorithm}"
+      end
+
       start unless recognizing?
 
       FFI::MemoryPointer.new(:int16, max_samples) do |buffer|
         loop do
-          if in_speech?
-            while in_speech?
-              process_audio(buffer, max_samples) or break
-            end
-
-            hypothesis = get_hypothesis
-            yield hypothesis if hypothesis
-          else
-            process_audio(buffer, max_samples) or break
-          end
+          send("recognize_#{algorithm}", max_samples, buffer, &b) or break
         end
       end
     ensure
@@ -95,7 +88,52 @@ module Pocketsphinx
       @recognizing = false
     end
 
+    # Determine which algorithm to use for co-ordinating speech recognition
+    #
+    # @return [Symbol] :continuous or :after_speech
+    # :continuous yields as soon as any hypothesis is available
+    # :after_speech yields hypothesis on speech -> silence transition if one exists
+    # Default is :after_speech
+    def algorithm
+      if configuration.respond_to?(:recognition_algorithm)
+        configuration.recognition_algorithm
+      else
+        ALGORITHMS.first
+      end
+    end
+
     private
+
+    # Yields as soon as any hypothesis is available
+    def recognize_continuous(max_samples, buffer)
+      process_audio(buffer, max_samples).tap do
+        if hypothesis = decoder.hypothesis
+          yield hypothesis
+
+          decoder.end_utterance
+          decoder.start_utterance
+        end
+      end
+    end
+
+    # Splits speech into utterances by detecting silence between them.
+    # By default this uses Pocketsphinx's internal Voice Activity Detection (VAD) which can be
+    # configured by adjusting the `vad_postspeech`, `vad_prespeech`, and `vad_threshold` settings.
+    def recognize_after_speech(max_samples, buffer)
+      if in_speech?
+        while in_speech?
+          process_audio(buffer, max_samples) or break
+        end
+
+        decoder.end_utterance
+        hypothesis = decoder.hypothesis
+        decoder.start_utterance
+
+        yield hypothesis if hypothesis
+      end
+
+      process_audio(buffer, max_samples)
+    end
 
     def process_audio(buffer, max_samples)
       sample_count = recordable.read_audio(buffer, max_samples)
@@ -110,14 +148,6 @@ module Pocketsphinx
       end
 
       sample_count
-    end
-
-    # Called on speech -> silence transition
-    def get_hypothesis
-      decoder.end_utterance
-      decoder.hypothesis.tap do
-        decoder.start_utterance
-      end
     end
   end
 end
