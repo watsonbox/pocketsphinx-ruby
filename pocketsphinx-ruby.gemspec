@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Pocketsphinx::VERSION
   spec.authors       = ["Howard Wilson"]
   spec.email         = ["howard@watsonbox.net"]
-  spec.summary       = %q{Ruby FFI pocketsphinx bindings}
-  spec.description   = %q{Ruby FFI pocketsphinx bindings}
+  spec.summary       = %q{Ruby speech recognition with Pocketsphinx}
+  spec.description   = %q{Provides Ruby FFI bindings for Pocketsphinx, a lightweight speech recognition engine.}
   spec.homepage      = "https://github.com/watsonbox/pocketsphinx-ruby"
   spec.license       = "MIT"
 
