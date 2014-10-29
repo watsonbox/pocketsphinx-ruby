@@ -77,8 +77,8 @@ module Pocketsphinx
     end
 
     def start
-      decoder.start_utterance
       recordable.start_recording
+      decoder.start_utterance
       @recognizing = true
     end
 

@@ -35,8 +35,8 @@ describe Pocketsphinx::SpeechRecognizer do
 
       expect(decoder).to receive(:end_utterance).ordered
       expect(recordable).to receive(:stop_recording).ordered
-      expect(decoder).to receive(:start_utterance).ordered
       expect(recordable).to receive(:start_recording).ordered
+      expect(decoder).to receive(:start_utterance).ordered
 
       subject.reconfigure
     end
