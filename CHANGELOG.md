@@ -1,5 +1,15 @@
 # Changelog
 
+**v0.1.1 - 29/10/14**
+
+* Allow logging to be disabled
+* Recognizer can now be paused (during TTS reply for example)
+* Spot keywords immediately by not using speech -> silence transitions
+* Return path_score and utterance_id with hypothesis
+* Fix namespacing bug in Configuration::Grammar
+* Improve test coverage
+
+
 **v0.1.0 - 24/10/14**
 
 * Support for JSGF grammars + very simple sentences DSL
