@@ -107,7 +107,7 @@ module Pocketsphinx
 
       hypothesis.nil? ? nil : Hypothesis.new(
         hypothesis,
-        mp_path_score.read_int32,
+        mp_path_score.get_int32(0),
         mp_utterance_id.read_pointer.read_string.force_encoding('UTF-8')
       )
     end

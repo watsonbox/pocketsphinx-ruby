@@ -137,7 +137,7 @@ describe Pocketsphinx::Decoder do
           expect(mp_path_score).to be_a(FFI::MemoryPointer)
           expect(mp_utterance_id).to be_a(FFI::MemoryPointer)
 
-          mp_path_score.write_int32(20)
+          mp_path_score.put_int32(0, 20)
           mp_utterance_id.write_pointer(FFI::MemoryPointer.from_string("Utterance"))
 
           "Hypothesis"
