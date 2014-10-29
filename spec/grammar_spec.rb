@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe Grammar::Jsgf do
+describe Pocketsphinx::Grammar::Jsgf do
   it "raises an exception when neither a file or block are given" do
-    expect { Grammar::Jsgf.new }.to raise_exception "Either a path or block is required to create a JSGF grammar"
+    expect { Pocketsphinx::Grammar::Jsgf.new }.to raise_exception "Either a path or block is required to create a JSGF grammar"
   end
 
   context "reading a grammar from a file" do
     let(:grammar_path) { grammar :goforward }
-    subject { Grammar::Jsgf.new(grammar_path) }
+    subject { Pocketsphinx::Grammar::Jsgf.new(grammar_path) }
 
     it "reads a grammar from a file" do
       expect(subject.raw.lines.count).to eq(15)
@@ -24,7 +24,7 @@ describe Grammar::Jsgf do
 
   context "building a grammer from a block" do
     subject do
-      Grammar::Jsgf.new do
+      Pocketsphinx::Grammar::Jsgf.new do
         sentence "Go forward ten meters"
         sentence "Go backward ten meters"
       end

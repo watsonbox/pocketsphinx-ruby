@@ -6,7 +6,7 @@ module Pocketsphinx
       def initialize(*args, &block)#(grammar_path = nil)
         super()
 
-        @grammar = ::Grammar::Jsgf.new(*args, &block)
+        @grammar = ::Pocketsphinx::Grammar::Jsgf.new(*args, &block)
       end
 
       # Since JSGF strings are not supported in Pocketsphinx configuration (only files),

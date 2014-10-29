@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Decoder do
-  subject { Decoder.new(configuration) }
+describe Pocketsphinx::Decoder do
+  subject { Pocketsphinx::Decoder.new(configuration) }
   let(:ps_api) { subject.ps_api }
   let(:ps_decoder) { double }
-  let(:configuration) { Configuration.default }
+  let(:configuration) { Pocketsphinx::Configuration.default }
 
   before do
     subject.ps_api = double

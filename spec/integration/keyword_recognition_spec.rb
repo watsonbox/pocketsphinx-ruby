@@ -2,10 +2,10 @@ require 'spec_helper'
 
 # Keyword spotting recognizes keywords mid-speech, not only after a speech -> silence transition
 describe 'keyword spotting' do
-  let(:recordable) { AudioFile.new('spec/assets/audio/goforward.raw') }
+  let(:recordable) { Pocketsphinx::AudioFile.new('spec/assets/audio/goforward.raw') }
 
   subject do
-    SpeechRecognizer.new(@configuration).tap do |speech_recognizer|
+    Pocketsphinx::SpeechRecognizer.new(@configuration).tap do |speech_recognizer|
       speech_recognizer.recordable = recordable
       speech_recognizer.decoder = @decoder
     end
@@ -13,8 +13,8 @@ describe 'keyword spotting' do
 
   # Share decoder across all examples for speed
   before :all do
-    @configuration = Configuration::KeywordSpotting.new('forward')
-    @decoder = Decoder.new(@configuration)
+    @configuration = Pocketsphinx::Configuration::KeywordSpotting.new('forward')
+    @decoder = Pocketsphinx::Decoder.new(@configuration)
   end
 
   describe '#recognize' do
