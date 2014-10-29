@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe 'speech recognition with default configuration' do
   subject do
-    AudioFileSpeechRecognizer.new.tap do |speech_recognizer|
+    Pocketsphinx::AudioFileSpeechRecognizer.new.tap do |speech_recognizer|
       speech_recognizer.decoder = @decoder
     end
   end
 
   # Share decoder across all examples for speed
   before :all do
-    @decoder = Decoder.new(Configuration.default)
+    @decoder = Pocketsphinx::Decoder.new(Pocketsphinx::Configuration.default)
   end
 
   describe '#recognize' do

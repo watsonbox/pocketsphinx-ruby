@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Microphone do
+describe Pocketsphinx::Microphone do
   module DummyAPI
     def self.ad_open_dev(default_device, sample_rate)
       :audio_device
@@ -13,7 +13,7 @@ describe Microphone do
   # Share microphone across all examples for speed
   before :all do
     # Don't open an audio device as there isn't one on Travis CI
-    @microphone = Microphone.new(16000, nil, DummyAPI)
+    @microphone = Pocketsphinx::Microphone.new(16000, nil, DummyAPI)
   end
 
   describe '#start_recording' do

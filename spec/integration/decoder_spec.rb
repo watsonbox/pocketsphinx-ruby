@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe Decoder do
+describe Pocketsphinx::Decoder do
   subject { @decoder }
   let(:configuration) { @configuration }
 
   # Share decoder across all examples for speed
   before :all do
-    @configuration = Configuration.default
-    @decoder = Decoder.new(@configuration)
+    @configuration = Pocketsphinx::Configuration.default
+    @decoder = Pocketsphinx::Decoder.new(@configuration)
   end
 
   describe '#decode' do

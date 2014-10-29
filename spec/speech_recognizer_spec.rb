@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe SpeechRecognizer do
+describe Pocketsphinx::SpeechRecognizer do
   let(:configuration) { double }
   let(:recordable) { double }
   let(:decoder) { double }
-  subject { SpeechRecognizer.new(configuration) }
+  subject { Pocketsphinx::SpeechRecognizer.new(configuration) }
 
   before do
     subject.decoder = decoder

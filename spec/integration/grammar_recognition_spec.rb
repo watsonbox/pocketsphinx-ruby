@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe 'speech recognition with a grammar' do
-  let(:recordable) { AudioFile.new('spec/assets/audio/goforward.raw') }
+  let(:recordable) { Pocketsphinx::AudioFile.new('spec/assets/audio/goforward.raw') }
 
   subject do
-    SpeechRecognizer.new(@configuration).tap do |speech_recognizer|
+    Pocketsphinx::SpeechRecognizer.new(@configuration).tap do |speech_recognizer|
       speech_recognizer.recordable = recordable
       speech_recognizer.decoder = @decoder
     end
@@ -12,8 +12,8 @@ describe 'speech recognition with a grammar' do
 
   # Share decoder across all examples for speed
   before :all do
-    @configuration = Configuration::Grammar.new('spec/assets/grammars/goforward.gram')
-    @decoder = Decoder.new(@configuration)
+    @configuration = Pocketsphinx::Configuration::Grammar.new('spec/assets/grammars/goforward.gram')
+    @decoder = Pocketsphinx::Decoder.new(@configuration)
   end
 
   describe '#recognize' do

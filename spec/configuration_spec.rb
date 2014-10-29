@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Configuration do
+describe Pocketsphinx::Configuration do
   subject { Pocketsphinx::Configuration.default }
 
   it "provides a default pocketsphinx configuration" do
@@ -47,7 +47,7 @@ describe Configuration do
   end
 
   it "does not support string lists" do
-    subject.setting_definitions['string_list_setting'] = Configuration::SettingDefinition.new(
+    subject.setting_definitions['string_list_setting'] = Pocketsphinx::Configuration::SettingDefinition.new(
       'string_list_setting', 32, nil, nil
     )
 
@@ -97,7 +97,7 @@ describe Configuration do
   end
 
   context 'keyword spotting configuration' do
-    subject { Configuration::KeywordSpotting.new('Okay computer') }
+    subject { Pocketsphinx::Configuration::KeywordSpotting.new('Okay computer') }
 
     it 'modifies the default configuration keyphrase and language model' do
       changes = subject.changes
