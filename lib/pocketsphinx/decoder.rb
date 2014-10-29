@@ -1,6 +1,17 @@
 module Pocketsphinx
   class Decoder < Struct.new(:configuration)
+    require 'delegate'
+
     include API::CallHelpers
+
+    class Hypothesis < SimpleDelegator
+      attr_accessor :path_score, :utterance_id
+
+      def initialize(string, path_score, utterance_id)
+        @path_score, @utterance_id = path_score, utterance_id
+        super(string)
+      end
+    end
 
     attr_writer :ps_api
 
@@ -85,12 +96,20 @@ module Pocketsphinx
       ps_api.ps_get_in_speech(ps_decoder) != 0
     end
 
-    # Get hypothesis string and path score.
+    # Get hypothesis string (with #path_score and #utterance_id).
     #
-    # @return [String] Hypothesis string
-    # @todo Expand to return path score and utterance ID
+    # @return [Hypothesis] Hypothesis (behaves like a string)
     def hypothesis
-      ps_api.ps_get_hyp(ps_decoder, nil, nil)
+      mp_path_score = FFI::MemoryPointer.new(:int32, 1)
+      mp_utterance_id = FFI::MemoryPointer.new(:pointer, 1)
+
+      hypothesis = ps_api.ps_get_hyp(ps_decoder, mp_path_score, mp_utterance_id)
+
+      hypothesis.nil? ? nil : Hypothesis.new(
+        hypothesis,
+        mp_path_score.read_int32,
+        mp_utterance_id.read_pointer.read_string.force_encoding('UTF-8')
+      )
     end
 
     # Adds new search using JSGF model.

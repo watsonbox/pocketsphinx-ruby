@@ -132,11 +132,22 @@ describe Pocketsphinx::Decoder do
   describe '#hypothesis' do
     it 'calls libpocketsphinx' do
       expect(ps_api)
-        .to receive(:ps_get_hyp)
-        .with(subject.ps_decoder, nil, nil)
-        .and_return("Hypothesis")
+        .to receive(:ps_get_hyp) do |ps_decoder, mp_path_score, mp_utterance_id|
+          expect(ps_decoder).to eq(subject.ps_decoder)
+          expect(mp_path_score).to be_a(FFI::MemoryPointer)
+          expect(mp_utterance_id).to be_a(FFI::MemoryPointer)
 
-      expect(subject.hypothesis).to eq("Hypothesis")
+          mp_path_score.write_int32(20)
+          mp_utterance_id.write_pointer(FFI::MemoryPointer.from_string("Utterance"))
+
+          "Hypothesis"
+        end
+
+      hypothesis = subject.hypothesis
+
+      expect(hypothesis).to eq("Hypothesis")
+      expect(hypothesis.path_score).to eq(20)
+      expect(hypothesis.utterance_id).to eq("Utterance")
     end
   end
 
