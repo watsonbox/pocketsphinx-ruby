@@ -146,7 +146,7 @@ configuration = Pocketsphinx::Configuration::KeywordSpotting.new('Okay computer'
 recognizer = Pocketsphinx::LiveSpeechRecognizer.new(configuration)
 ```
 
-The `KeywordSpotting` configuration accepts a second argument for adjusting the sensitivity of the keyword detection. Note that this is just a wrapper which sets the `keyphrase` and `kws_threshold` settings on the default configuration:
+The `KeywordSpotting` configuration accepts a second argument for adjusting the sensitivity of the keyword detection. Note that this is just a wrapper which sets the `keyphrase` and `kws_threshold` settings on the default configuration, and removes the language model:
 
 ```ruby
 Pocketsphinx::Configuration::KeywordSpotting.new('keyword', 2).changes
