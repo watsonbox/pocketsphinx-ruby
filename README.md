@@ -177,6 +177,14 @@ configuration = Pocketsphinx::Configuration::Grammar.new do
 end
 ```
 
+## Recognition Accuracy and Training
+
+See the CMU Sphinx resources on [training](http://cmusphinx.sourceforge.net/wiki/tutorialam) and [adapting](http://cmusphinx.sourceforge.net/wiki/tutorialadapt) acoustic models for more information.
+
+[Peter Grasch](http://grasch.net/), author of [Simon](https://simon.kde.org/), has also made a number of interesting posts on the [state of open source speech recognition](http://grasch.net/node/19), as wells as improving [language](http://grasch.net/node/20) and [acoustic](http://grasch.net/node/21) models.
+
+See [`sphinxtrain-ruby`](https://github.com/watsonbox/sphinxtrain-ruby) for an experimental toolkit for training/adapting CMU Sphinx acoustic models. Its main goal is to help with adapting existing acoustic models to a specific speaker/accent.
+
 
 ## Troubleshooting
 
