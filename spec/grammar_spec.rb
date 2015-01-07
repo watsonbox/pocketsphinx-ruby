@@ -7,10 +7,10 @@ describe Pocketsphinx::Grammar::Jsgf do
 
   context "reading a grammar from a file" do
     let(:grammar_path) { grammar :goforward }
-    subject { Pocketsphinx::Grammar::Jsgf.new(grammar_path) }
+    subject { Pocketsphinx::Configuration::Grammar.new(grammar_path) }
 
     it "reads a grammar from a file" do
-      expect(subject.raw.lines.count).to eq(15)
+      expect(subject.grammar.rules.count).to eq(4)
     end
 
     context "the grammar file is invalid" do
