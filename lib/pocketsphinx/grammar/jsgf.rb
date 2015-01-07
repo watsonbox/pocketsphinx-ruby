@@ -26,6 +26,10 @@ module Pocketsphinx
         builder.jsgf
       end
 
+      def to_s
+        raw
+      end
+
       private
 
       def check_grammar
