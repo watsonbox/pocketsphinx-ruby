@@ -188,6 +188,8 @@ See [`sphinxtrain-ruby`](https://github.com/watsonbox/sphinxtrain-ruby) for an e
 
 ## Troubleshooting
 
+First and foremost, because this gem **depends on development versions** of CMU Sphinx packages, there will be times when errors are caused by API changes or bugs in those packages. Unfortunately until some up to date releases are made this is going to happen from time to time, so please do open an issue with as much detail as you have.
+
 This gem has been tested with a manual Pocketsphinx installation on Ubuntu 14.04 and a Homebrew Pocketsphinx installation on OSX 10.9.4 Mavericks. Take a look at the following common problems before opening an issue.
 
 **`attach_function': Function 'ps_default_search_args' not found in [libpocketsphinx.so] (FFI::NotFoundError)**
