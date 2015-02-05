@@ -5,10 +5,10 @@ module Pocketsphinx
     include API::CallHelpers
 
     class Hypothesis < SimpleDelegator
-      attr_accessor :path_score, :utterance_id
+      attr_accessor :path_score
 
-      def initialize(string, path_score, utterance_id)
-        @path_score, @utterance_id = path_score, utterance_id
+      def initialize(string, path_score)
+        @path_score = path_score
         super(string)
       end
     end
@@ -80,10 +80,8 @@ module Pocketsphinx
     # This function should be called before any utterance data is passed
     # to the decoder.  It marks the start of a new utterance and
     # reinitializes internal data structures.
-    #
-    # @param [String] name String uniquely identifying this utterance. If nil, one will be created.
-    def start_utterance(name = nil)
-      api_call :ps_start_utt, ps_decoder, name
+    def start_utterance
+      api_call :ps_start_utt, ps_decoder
     end
 
     # End utterance processing
@@ -101,14 +99,12 @@ module Pocketsphinx
     # @return [Hypothesis] Hypothesis (behaves like a string)
     def hypothesis
       mp_path_score = FFI::MemoryPointer.new(:int32, 1)
-      mp_utterance_id = FFI::MemoryPointer.new(:pointer, 1)
 
-      hypothesis = ps_api.ps_get_hyp(ps_decoder, mp_path_score, mp_utterance_id)
+      hypothesis = ps_api.ps_get_hyp(ps_decoder, mp_path_score)
 
       hypothesis.nil? ? nil : Hypothesis.new(
         hypothesis,
-        mp_path_score.get_int32(0),
-        mp_utterance_id.read_pointer.read_string.force_encoding('UTF-8')
+        mp_path_score.get_int32(0)
       )
     end
 

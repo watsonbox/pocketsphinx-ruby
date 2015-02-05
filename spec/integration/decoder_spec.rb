@@ -15,14 +15,12 @@ describe Pocketsphinx::Decoder do
       @decoder.ps_api = nil
       subject.decode File.open('spec/assets/audio/goforward.raw', 'rb')
 
-      # With the default configuration (no specific grammar), pocketsphinx doesn't actually
-      # get this quite right, but nonetheless this is the expected output
-      expect(subject.hypothesis).to eq("go forward ten years")
+      expect(subject.hypothesis).to eq("go forward ten meters")
     end
 
     it 'accepts a file path as well as a stream' do
       subject.decode 'spec/assets/audio/goforward.raw'
-      expect(subject.hypothesis).to eq("go forward ten years")
+      expect(subject.hypothesis).to eq("go forward ten meters")
     end
   end
 end

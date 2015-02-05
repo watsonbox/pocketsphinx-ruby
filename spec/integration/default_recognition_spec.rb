@@ -15,7 +15,7 @@ describe 'speech recognition with default configuration' do
   describe '#recognize' do
     it 'should decode speech in raw audio' do
       expect { |b| subject.recognize('spec/assets/audio/goforward.raw', 4096, &b) }.
-        to yield_with_args("go forward ten years")
+        to yield_with_args("go forward ten meters")
     end
   end
 end

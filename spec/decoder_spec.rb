@@ -80,19 +80,19 @@ describe Pocketsphinx::Decoder do
     it 'calls libpocketsphinx' do
       expect(ps_api)
         .to receive(:ps_start_utt)
-        .with(subject.ps_decoder, "Utterance Name")
+        .with(subject.ps_decoder)
         .and_return(0)
 
-      subject.start_utterance("Utterance Name")
+      subject.start_utterance
     end
 
     it 'raises an exception on error' do
       expect(ps_api)
         .to receive(:ps_start_utt)
-        .with(subject.ps_decoder, "Utterance Name")
+        .with(subject.ps_decoder)
         .and_return(-1)
 
-      expect { subject.start_utterance("Utterance Name") }
+      expect { subject.start_utterance }
         .to raise_exception "Decoder#start_utterance failed with error code -1"
     end
   end
@@ -132,13 +132,11 @@ describe Pocketsphinx::Decoder do
   describe '#hypothesis' do
     it 'calls libpocketsphinx' do
       expect(ps_api)
-        .to receive(:ps_get_hyp) do |ps_decoder, mp_path_score, mp_utterance_id|
+        .to receive(:ps_get_hyp) do |ps_decoder, mp_path_score|
           expect(ps_decoder).to eq(subject.ps_decoder)
           expect(mp_path_score).to be_a(FFI::MemoryPointer)
-          expect(mp_utterance_id).to be_a(FFI::MemoryPointer)
 
           mp_path_score.put_int32(0, 20)
-          mp_utterance_id.write_pointer(FFI::MemoryPointer.from_string("Utterance"))
 
           "Hypothesis"
         end
@@ -147,7 +145,6 @@ describe Pocketsphinx::Decoder do
 
       expect(hypothesis).to eq("Hypothesis")
       expect(hypothesis.path_score).to eq(20)
-      expect(hypothesis.utterance_id).to eq("Utterance")
     end
   end
 
