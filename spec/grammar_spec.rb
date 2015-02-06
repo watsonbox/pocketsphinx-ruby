@@ -35,6 +35,19 @@ describe Pocketsphinx::Grammar::Jsgf do
     end
   end
 
+  context "building a grammar from a string" do
+    it "stores the string" do
+      grammar = Pocketsphinx::Grammar::Jsgf.from_string("#JSGF V1.0;\ngrammar turtle;\npublic <turtle> = go forward ten meters;")
+      expect(grammar.raw.lines.count).to eq(3)
+    end
+
+    context "the grammar string is invalid" do
+      it "raises an exception" do
+        expect { Pocketsphinx::Grammar::Jsgf.from_string("") }.to raise_exception "Invalid JSGF grammar"
+      end
+    end
+  end
+
   private
 
   def grammar(name)
