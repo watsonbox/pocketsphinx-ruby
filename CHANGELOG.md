@@ -1,5 +1,10 @@
 # Changelog
 
+**v0.2.0 - 03/03/15**
+
+* Updated to latest Pocketsphinx API interface
+
+
 **v0.1.1 - 29/10/14**
 
 * Allow logging to be disabled
