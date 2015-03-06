@@ -13,6 +13,8 @@ module Pocketsphinx
       end
     end
 
+    Word = Struct.new(:word, :start_frame, :end_frame)
+
     attr_writer :ps_api
 
     # Reinitialize the decoder with updated configuration.
@@ -106,6 +108,30 @@ module Pocketsphinx
         hypothesis,
         mp_path_score.get_int32(0)
       )
+    end
+
+    # Get an array of words with start/end frame values (10msec/frame) for current hypothesis
+    #
+    # @return [Array] Array of words with start/end frame values (10msec/frame)
+    def words
+      mp_path_score = FFI::MemoryPointer.new(:int32, 1)
+      start_frame   = FFI::MemoryPointer.new(:int16, 1)
+      end_frame     = FFI::MemoryPointer.new(:int16, 1)
+
+      seg_iter = ps_api.ps_seg_iter(ps_decoder, mp_path_score)
+      words    = []
+
+      while !seg_iter.null? do
+        ps_api.ps_seg_frames(seg_iter, start_frame, end_frame)
+        words << Pocketsphinx::Decoder::Word.new(
+            ps_api.ps_seg_word(seg_iter),
+            start_frame.get_int16(0),
+            end_frame.get_int16(0)
+        )
+        seg_iter = ps_api.ps_seg_next(seg_iter)
+      end
+
+      words
     end
 
     # Adds new search using JSGF model.

@@ -21,6 +21,15 @@ module Pocketsphinx
       attach_function :ps_unset_search, [:decoder, :string], :int
       attach_function :ps_get_search, [:decoder], :string
       attach_function :ps_set_search, [:decoder, :string], :int
+
+      typedef :pointer, :seg_iter
+
+      attach_function :ps_seg_iter, [:decoder, :pointer], :seg_iter
+      attach_function :ps_seg_next, [:seg_iter], :seg_iter
+      attach_function :ps_seg_word, [:seg_iter], :string
+      attach_function :ps_seg_frames, [:seg_iter, :pointer, :pointer], :void
+      attach_function :ps_seg_prob, [:seg_iter, :pointer, :pointer, :pointer], :int32
+      attach_function :ps_seg_free, [:seg_iter], :void
     end
   end
 end
