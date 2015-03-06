@@ -148,6 +148,35 @@ describe Pocketsphinx::Decoder do
     end
   end
 
+  describe '#words' do
+    let(:iterator) { FFI::MemoryPointer.from_string("") }
+
+    it 'calls libpocketsphinx' do
+      expect(ps_api).to receive(:ps_seg_iter).ordered.and_return(iterator)
+
+      expect(ps_api).to receive(:ps_seg_frames).ordered do |seg_iter, start_frame, end_frame|
+        start_frame.put_int16(0, 10)
+        end_frame.put_int16(0, 20)
+      end
+
+      expect(ps_api).to receive(:ps_seg_word).ordered.and_return("one")
+      expect(ps_api).to receive(:ps_seg_next).ordered.and_return(iterator)
+
+      expect(ps_api).to receive(:ps_seg_frames).ordered do |seg_iter, start_frame, end_frame|
+        start_frame.put_int16(0, 30)
+        end_frame.put_int16(0, 40)
+      end
+
+      expect(ps_api).to receive(:ps_seg_word).ordered.and_return("two")
+      expect(ps_api).to receive(:ps_seg_next).ordered.and_return(FFI::Pointer::NULL)
+
+      words = subject.words
+
+      expect(words[0]).to eq(Pocketsphinx::Decoder::Word.new("one", 10, 20))
+      expect(words[1]).to eq(Pocketsphinx::Decoder::Word.new("two", 30, 40))
+    end
+  end
+
   describe '#set_jsgf_string' do
     it 'calls libpocketsphinx' do
       expect(ps_api)
