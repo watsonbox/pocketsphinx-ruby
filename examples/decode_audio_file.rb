@@ -8,4 +8,4 @@ include Pocketsphinx
 decoder = Decoder.new(Configuration.default)
 decoder.decode 'spec/assets/audio/goforward.raw'
 
-puts decoder.hypothesis # => "go forward ten years"
+puts decoder.hypothesis # => "go forward ten meters"

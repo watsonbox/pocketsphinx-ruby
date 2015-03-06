@@ -69,7 +69,7 @@ The `AudioFileSpeechRecognizer` decodes directly from an audio file by coordinat
 recognizer = Pocketsphinx::AudioFileSpeechRecognizer.new
 
 recognizer.recognize('spec/assets/audio/goforward.raw') do |speech|
-  puts speech # => "go forward ten years"
+  puts speech # => "go forward ten meters"
 end
 ```
 
