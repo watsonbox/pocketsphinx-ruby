@@ -121,12 +121,12 @@ module Pocketsphinx
       seg_iter = ps_api.ps_seg_iter(ps_decoder, mp_path_score)
       words    = []
 
-      while !seg_iter.null? do
+      until seg_iter.null? do
         ps_api.ps_seg_frames(seg_iter, start_frame, end_frame)
         words << Pocketsphinx::Decoder::Word.new(
-            ps_api.ps_seg_word(seg_iter),
-            start_frame.get_int16(0),
-            end_frame.get_int16(0)
+          ps_api.ps_seg_word(seg_iter),
+          start_frame.get_int16(0),
+          end_frame.get_int16(0)
         )
         seg_iter = ps_api.ps_seg_next(seg_iter)
       end
