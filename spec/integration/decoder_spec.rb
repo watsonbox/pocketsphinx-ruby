@@ -29,7 +29,7 @@ describe Pocketsphinx::Decoder do
 
       expect(subject.words.map(&:word)).to eq(["<s>", "go", "forward", "ten", "meters", "</s>"])
       expect(subject.words.map(&:start_frame)).to eq([608, 611, 623, 676, 712, 771])
-      expect(subject.words.map(&:end_frame)).to eq([610, 622, 675, 711, 770, 821])
+      expect(subject.words.map(&:end_frame)).to eq([610, 622, 675, 711, 770, 819])
     end
   end
 end
