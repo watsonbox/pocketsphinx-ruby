@@ -21,6 +21,17 @@ describe Pocketsphinx::Decoder do
       expect(subject.hypothesis).to eq("go forward ten meters")
     end
 
+    # FIXME: This test illustrates a current issue discussed in:
+    #        https://github.com/watsonbox/pocketsphinx-ruby/issues/10
+    it 'incorrectly decodes the speech in hello.wav on first attempt' do
+      hypotheses = (1..2).map do
+        subject.decode File.open('spec/assets/audio/hello.wav', 'rb')
+        subject.hypothesis
+      end
+
+      expect(hypotheses).to eq(['oh', 'hello'])
+    end
+
     it 'accepts a file path as well as a stream' do
       subject.decode 'spec/assets/audio/goforward.raw'
       expect(subject.hypothesis).to eq("go forward ten meters")
