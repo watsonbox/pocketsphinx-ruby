@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Pocketsphinx::Decoder do
-  subject { Pocketsphinx::Decoder.new(configuration) }
+  subject { Pocketsphinx::Decoder.new(configuration, ps_decoder) }
   let(:ps_api) { subject.ps_api }
   let(:ps_decoder) { double }
   let(:configuration) { Pocketsphinx::Configuration.default }
@@ -9,6 +9,17 @@ describe Pocketsphinx::Decoder do
   before do
     subject.ps_api = double
     allow(ps_api).to receive(:ps_init).and_return(ps_decoder)
+  end
+
+  describe 'initialization' do
+    it 'initializes the underlying Pocketsphinx decoder when one is not provided' do
+      expect(Pocketsphinx::API::Pocketsphinx)
+        .to receive(:ps_init)
+        .with(configuration.ps_config)
+        .and_return(ps_decoder)
+
+      Pocketsphinx::Decoder.new(configuration)
+    end
   end
 
   describe '#reconfigure' do

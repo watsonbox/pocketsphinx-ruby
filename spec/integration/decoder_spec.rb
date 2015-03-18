@@ -10,6 +10,11 @@ describe Pocketsphinx::Decoder do
     @decoder = Pocketsphinx::Decoder.new(@configuration)
   end
 
+  it 'reads cmninit configuration values from default acoustic model feat.params' do
+    expect(configuration.details('cmninit')[:default]).to eq("8.0")
+    expect(configuration.details('cmninit')[:value]).to eq("40,3,-1")
+  end
+
   describe '#decode' do
     it 'correctly decodes the speech in goforward.raw' do
       @decoder.ps_api = nil

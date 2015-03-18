@@ -1,5 +1,5 @@
 module Pocketsphinx
-  class Decoder < Struct.new(:configuration)
+  class Decoder
     require 'delegate'
 
     include API::CallHelpers
@@ -16,6 +16,19 @@ module Pocketsphinx
     Word = Struct.new(:word, :start_frame, :end_frame)
 
     attr_writer :ps_api
+    attr_accessor :configuration
+
+    # Initialize a Decoder
+    #
+    # Note that this initialization process actually updates the Configuration based on settings
+    # which are found in feat.params along with the acoustic model.
+    #
+    # @param [Configuration] configuration
+    # @param [FFI::Pointer] ps_decoder An optional Pocketsphinx decoder. One is initialized if not provided.
+    def initialize(configuration, ps_decoder = nil)
+      @configuration = configuration
+      init_decoder if ps_decoder.nil?
+    end
 
     # Reinitialize the decoder with updated configuration.
     #
