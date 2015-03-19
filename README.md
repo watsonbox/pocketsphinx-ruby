@@ -130,7 +130,7 @@ To open this audio file take a look at [this wiki page](https://github.com/watso
 The `Decoder` class uses Pocketsphinx's libpocketsphinx to decode audio data into text. For example to decode a single utterance:
 
 ```ruby
-decoder = Pocketsphinx::Decoder.new(Pocketsphinx::Configuration.default)
+decoder = Pocketsphinx::Decoder.new
 decoder.decode 'spec/assets/audio/goforward.raw'
 
 puts decoder.hypothesis # => "go forward ten meters"
@@ -150,10 +150,10 @@ decoder.words
 # ]
 ```
 
-Note: When the `Decoder` is initialized, the supplied `Configuration` is updated by Pocketsphinx with some settings from the acoustic model. To see exactly what's going on:
+> Note: When the `Decoder` is initialized, the supplied `Configuration` is updated by the system CMU Pocketsphinx libraries with acoustic model settings that are configured outside of this gem.  To see exactly what's being configured by your local libraries:
 
 ```ruby
-Pocketsphinx::Decoder.new(Pocketsphinx::Configuration.default).configuration.changes
+Pocketsphinx::Decoder.new.configuration.changes
 ```
 
 
