@@ -150,6 +150,12 @@ decoder.words
 # ]
 ```
 
+Note: When the `Decoder` is initialized, the supplied `Configuration` is updated by Pocketsphinx with some settings from the acoustic model. To see exactly what's going on:
+
+```ruby
+Pocketsphinx::Decoder.new(Pocketsphinx::Configuration.default).configuration.changes
+```
+
 
 ### Keyword Spotting
 
