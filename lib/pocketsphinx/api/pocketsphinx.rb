@@ -26,6 +26,7 @@ module Pocketsphinx
       attach_function :ps_unset_search, [:decoder, :string], :int
       attach_function :ps_get_search, [:decoder], :string
       attach_function :ps_set_search, [:decoder, :string], :int
+      attach_function :ps_get_feat, [:decoder], :pointer
 
       typedef :pointer, :seg_iter
 
@@ -35,6 +36,11 @@ module Pocketsphinx
       attach_function :ps_seg_frames, [:seg_iter, :pointer, :pointer], :void
       attach_function :ps_seg_prob, [:seg_iter, :pointer, :pointer, :pointer], :int32
       attach_function :ps_seg_free, [:seg_iter], :void
+
+      def self.get_cmn_values(ps_decoder)
+        feature = Sphinxbase::Feature.new(ps_get_feat(ps_decoder))
+        feature[:cmn_struct][:cmn_mean].get_array_of_float32(0, feature[:cmn_struct][:veclen])
+      end
     end
   end
 end

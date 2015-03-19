@@ -66,6 +66,7 @@ module Pocketsphinx
     # @param [IO] audio_file The raw audio stream to decode as a single utterance
     # @param [Fixnum] max_samples The maximum samples to process from the stream on each iteration
     def decode_raw(audio_file, max_samples = 2048)
+      audio_file.rewind
       start_utterance
 
       FFI::MemoryPointer.new(:int16, max_samples) do |buffer|
@@ -145,6 +146,10 @@ module Pocketsphinx
       end
 
       words
+    end
+
+    def cmn_values
+      ps_api.get_cmn_values(ps_decoder)
     end
 
     # Adds new search using JSGF model.

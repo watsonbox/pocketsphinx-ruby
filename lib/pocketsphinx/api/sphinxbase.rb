@@ -4,6 +4,8 @@ module Pocketsphinx
       extend FFI::Library
       ffi_lib "libsphinxbase"
 
+      include Cmn
+
       class Argument < FFI::Struct
         layout :name, :string,
           :type, :int,

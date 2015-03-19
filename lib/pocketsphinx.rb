@@ -3,6 +3,7 @@ require 'ffi'
 require "pocketsphinx/version"
 
 # Pocketsphinx FFI API
+require "pocketsphinx/api/sphinxbase/cmn"
 require "pocketsphinx/api/sphinxbase"
 require "pocketsphinx/api/sphinxad"
 require "pocketsphinx/api/pocketsphinx"
@@ -22,6 +23,7 @@ require "pocketsphinx/configuration/grammar"
 require "pocketsphinx/audio_file"
 require "pocketsphinx/microphone"
 require "pocketsphinx/decoder"
+require "pocketsphinx/cmn_decoder"
 require "pocketsphinx/speech_recognizer"
 require "pocketsphinx/live_speech_recognizer"
 require "pocketsphinx/audio_file_speech_recognizer"
