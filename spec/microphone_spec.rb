@@ -72,16 +72,16 @@ describe Pocketsphinx::Microphone do
     it 'calls libsphinxad' do
       expect(ps_api)
         .to receive(:ad_read)
-        .with(subject.ps_audio_device, :buffer, 4096)
+        .with(subject.ps_audio_device, :buffer, 2048)
         .and_return(0)
 
-      subject.read_audio(:buffer, 4096)
+      subject.read_audio(:buffer, 2048)
     end
   end
 
   describe '#read_audio_delay' do
-    it 'should be 0.128 seconds for a max_samples of 4096 and sample rate of 16kHz' do
-      expect(subject.read_audio_delay(4096)).to eq(0.128)
+    it 'should be 0.128 seconds for a max_samples of 2048 and sample rate of 16kHz' do
+      expect(subject.read_audio_delay(2048)).to eq(0.128)
     end
   end
 

@@ -6,7 +6,7 @@ module Pocketsphinx
     # @param [FFI::Pointer] buffer 16bit buffer of at least max_samples in size
     # @params [Fixnum] max_samples The maximum number of samples to read from the audio file
     # @return [Fixnum] Samples actually read; nil if EOF
-    def read_audio(buffer, max_samples = 4096)
+    def read_audio(buffer, max_samples = 2048)
       if file.nil?
         raise "Can't read audio: use AudioFile#start_recording to open the file first"
       end

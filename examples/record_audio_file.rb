@@ -5,7 +5,7 @@ require "pocketsphinx-ruby"
 
 include Pocketsphinx
 
-MAX_SAMPLES = 4096
+MAX_SAMPLES = 2048
 RECORDING_INTERVAL = 0.1
 RECORDING_LENGTH = 5
 

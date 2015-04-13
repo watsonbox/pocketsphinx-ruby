@@ -64,24 +64,24 @@ describe Pocketsphinx::Decoder do
 
   describe '#process_raw' do
     it 'calls libpocketsphinx' do
-      FFI::MemoryPointer.new(:int16, 4096) do |buffer|
+      FFI::MemoryPointer.new(:int16, 2048) do |buffer|
         expect(ps_api)
           .to receive(:ps_process_raw)
-          .with(subject.ps_decoder, buffer, 4096, 0, 0)
+          .with(subject.ps_decoder, buffer, 2048, 0, 0)
           .and_return(0)
 
-        subject.process_raw(buffer, 4096, false, false)
+        subject.process_raw(buffer, 2048, false, false)
       end
     end
 
     it 'raises an exception on error' do
-      FFI::MemoryPointer.new(:int16, 4096) do |buffer|
+      FFI::MemoryPointer.new(:int16, 2048) do |buffer|
         expect(ps_api)
           .to receive(:ps_process_raw)
-          .with(subject.ps_decoder, buffer, 4096, 0, 0)
+          .with(subject.ps_decoder, buffer, 2048, 0, 0)
           .and_return(-1)
 
-        expect { subject.process_raw(buffer, 4096, false, false) }
+        expect { subject.process_raw(buffer, 2048, false, false) }
           .to raise_exception "Decoder#process_raw failed with error code -1"
       end
     end
