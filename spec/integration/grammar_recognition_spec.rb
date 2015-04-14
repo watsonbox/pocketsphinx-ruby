@@ -18,7 +18,7 @@ describe 'speech recognition with a grammar' do
 
   describe '#recognize' do
     it 'should decode speech in raw audio' do
-      expect { |b| subject.recognize(4096, &b) }.to yield_with_args("go forward ten meters")
+      expect { |b| subject.recognize(2048, &b) }.to yield_with_args("go forward ten meters")
     end
   end
 end

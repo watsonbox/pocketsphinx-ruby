@@ -19,7 +19,7 @@ describe 'keyword spotting' do
 
   describe '#recognize' do
     it 'should decode speech in raw audio' do
-      expect { |b| subject.recognize(4096, &b) }.to yield_with_args('forward')
+      expect { |b| subject.recognize(2048, &b) }.to yield_with_args('forward')
     end
   end
 end

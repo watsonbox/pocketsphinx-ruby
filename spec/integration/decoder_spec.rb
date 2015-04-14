@@ -41,8 +41,8 @@ describe Pocketsphinx::Decoder do
       subject.decode File.open('spec/assets/audio/goforward.raw', 'rb')
 
       expect(subject.words.map(&:word)).to eq(["<s>", "go", "forward", "ten", "meters", "</s>"])
-      expect(subject.words.map(&:start_frame)).to eq([51, 54, 66, 119, 155, 214])
-      expect(subject.words.map(&:end_frame)).to eq([53, 65, 118, 154, 213, 262])
+      expect(subject.words.map(&:start_frame)).to eq([0, 46, 64, 117, 153, 212])
+      expect(subject.words.map(&:end_frame)).to eq([45, 63, 116, 152, 211, 260])
     end
   end
 end

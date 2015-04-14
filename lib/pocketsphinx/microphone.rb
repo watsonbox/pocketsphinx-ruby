@@ -49,7 +49,7 @@ module Pocketsphinx
     # @params [Fixnum] max_samples The maximum number of samples to read from the audio device
     # @return [Fixnum] Samples actually read (could be 0 since non-blocking); nil if not
     #   recording and no more samples remaining to be read from most recent recording.
-    def read_audio(buffer, max_samples = 4096)
+    def read_audio(buffer, max_samples = 2048)
       samples = ps_api.ad_read(@ps_audio_device, buffer, max_samples)
       samples if samples >= 0
     end
@@ -60,8 +60,8 @@ module Pocketsphinx
     # we specify a delay which should fill half of the max buffer size
     #
     # @param [Fixnum] max_samples The maximum samples we tried to read from the audio device
-    def read_audio_delay(max_samples = 4096)
-      max_samples.to_f / (2 * sample_rate)
+    def read_audio_delay(max_samples = 2048)
+      max_samples.to_f / sample_rate
     end
 
     def close_device

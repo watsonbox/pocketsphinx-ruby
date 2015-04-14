@@ -43,7 +43,7 @@ module Pocketsphinx
     # Recognize speech and yield hypotheses in infinite loop
     #
     # @param [Fixnum] max_samples Number of samples to process at a time
-    def recognize(max_samples = 4096, &b)
+    def recognize(max_samples = 2048, &b)
       unless ALGORITHMS.include?(algorithm)
         raise NotImplementedError, "Unknown speech recognition algorithm: #{algorithm}"
       end
