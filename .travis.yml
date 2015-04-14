@@ -1,10 +1,11 @@
 language: ruby
 rvm:
-  - 2.1.2
+  - 2.2.2
+  - 2.1.6
   - 2.0.0
   - 1.9.3
   - rbx-2.2.9
-  - jruby-1.7.16
+  - jruby-1.7.19
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y swig
