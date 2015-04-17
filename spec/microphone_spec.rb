@@ -80,8 +80,8 @@ describe Pocketsphinx::Microphone do
   end
 
   describe '#read_audio_delay' do
-    it 'should be 0.128 seconds for a max_samples of 2048 and sample rate of 16kHz' do
-      expect(subject.read_audio_delay(2048)).to eq(0.128)
+    it 'should be 0.064 seconds for a max_samples of 2048 and sample rate of 16kHz' do
+      expect(subject.read_audio_delay(2048)).to eq(0.064)
     end
   end
 
