@@ -1,5 +1,12 @@
 # Changelog
 
+**v0.3.0 - 17/04/15**
+
+* Add Words support to Decoder
+* Don't lazy initialize Pocketsphinx decoder
+* Use buffer size of 2048 as now [required](https://github.com/cmusphinx/pocketsphinx/commit/541b5dfa87ef5fffe509d7c195803fd45749db5e) by Pocketsphinx
+
+
 **v0.2.0 - 03/03/15**
 
 * Updated to latest Pocketsphinx API interface
