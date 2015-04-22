@@ -224,3 +224,7 @@ An error like this probably means that you have an old version of the Pocketsphi
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
+### Projects Using pocketsphinx-ruby
+
+* [Isabella](https://github.com/chrisvfritz/isabella) - A voice-computing assistant built in Ruby.
