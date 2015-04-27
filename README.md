@@ -228,3 +228,4 @@ An error like this probably means that you have an old version of the Pocketsphi
 ### Projects Using pocketsphinx-ruby
 
 * [Isabella](https://github.com/chrisvfritz/isabella) - A voice-computing assistant built in Ruby.
+* [sphinxtrain-ruby](https://github.com/watsonbox/sphinxtrain-ruby) - A Toolkit for training/adapting CMU Sphinx acoustic models.
