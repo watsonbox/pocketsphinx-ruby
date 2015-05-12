@@ -108,9 +108,10 @@ module Pocketsphinx
     def recognize_continuous(max_samples, buffer)
       process_audio(buffer, max_samples).tap do
         if hypothesis = decoder.hypothesis
+          decoder.end_utterance
+
           yield hypothesis
 
-          decoder.end_utterance
           decoder.start_utterance
         end
       end
@@ -126,10 +127,12 @@ module Pocketsphinx
         end
 
         decoder.end_utterance
-        hypothesis = decoder.hypothesis
-        decoder.start_utterance
 
-        yield hypothesis if hypothesis
+        if hypothesis = decoder.hypothesis
+          yield hypothesis
+        end
+
+        decoder.start_utterance
       end
 
       process_audio(buffer, max_samples)
