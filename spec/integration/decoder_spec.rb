@@ -19,6 +19,9 @@ describe Pocketsphinx::Decoder do
     it 'correctly decodes the speech in goforward.raw' do
       subject.decode File.open('spec/assets/audio/goforward.raw', 'rb')
       expect(subject.hypothesis).to eq("go forward ten meters")
+
+      expect(subject.hypothesis.path_score).to eq(-7636)
+      expect(subject.hypothesis.posterior_prob).to eq(-54501)
     end
 
     # FIXME: This test illustrates a current issue discussed in:
