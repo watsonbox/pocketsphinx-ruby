@@ -152,10 +152,17 @@ describe Pocketsphinx::Decoder do
           "Hypothesis"
         end
 
+      expect(ps_api)
+        .to receive(:ps_get_prob) do |ps_decoder|
+          expect(ps_decoder).to eq(subject.ps_decoder)
+          1
+        end
+
       hypothesis = subject.hypothesis
 
       expect(hypothesis).to eq("Hypothesis")
       expect(hypothesis.path_score).to eq(20)
+      expect(hypothesis.posterior_prob).to eq(1)
     end
   end
 

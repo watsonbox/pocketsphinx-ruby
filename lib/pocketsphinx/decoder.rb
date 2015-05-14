@@ -6,9 +6,12 @@ module Pocketsphinx
 
     class Hypothesis < SimpleDelegator
       attr_accessor :path_score
+      attr_accessor :posterior_prob
 
-      def initialize(string, path_score)
+      def initialize(string, path_score, posterior_prob = nil)
         @path_score = path_score
+        @posterior_prob = posterior_prob
+
         super(string)
       end
     end
@@ -116,10 +119,12 @@ module Pocketsphinx
       mp_path_score = FFI::MemoryPointer.new(:int32, 1)
 
       hypothesis = ps_api.ps_get_hyp(ps_decoder, mp_path_score)
+      posterior_prob = ps_api.ps_get_prob(ps_decoder)
 
       hypothesis.nil? ? nil : Hypothesis.new(
         hypothesis,
-        mp_path_score.get_int32(0)
+        mp_path_score.get_int32(0),
+        posterior_prob
       )
     end
 
