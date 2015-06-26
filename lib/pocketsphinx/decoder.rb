@@ -117,9 +117,10 @@ module Pocketsphinx
     # @return [Hypothesis] Hypothesis (behaves like a string)
     def hypothesis
       mp_path_score = FFI::MemoryPointer.new(:int32, 1)
+      logmath = ps_api.ps_get_logmath(ps_decoder)
 
       hypothesis = ps_api.ps_get_hyp(ps_decoder, mp_path_score)
-      posterior_prob = ps_api.ps_get_prob(ps_decoder)
+      posterior_prob = ps_api.logmath_exp(logmath, mp_path_score.get_int32(0))
 
       hypothesis.nil? ? nil : Hypothesis.new(
         hypothesis,

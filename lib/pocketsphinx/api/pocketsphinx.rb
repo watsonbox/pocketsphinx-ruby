@@ -6,6 +6,7 @@ module Pocketsphinx
 
       typedef :pointer, :decoder
       typedef :pointer, :configuration
+      typedef :pointer, :logmath
 
       # Allows expect(API::Pocketsphinx).to receive(:ps_init) in JRuby specs
       def self.ps_init(*args)
@@ -23,6 +24,9 @@ module Pocketsphinx
       attach_function :ps_get_in_speech, [:decoder], :uint8
       attach_function :ps_get_hyp, [:decoder, :pointer], :string
       attach_function :ps_get_prob, [:decoder], :int32
+      attach_function :ps_get_logmath, [:decoder], :logmath
+      attach_function :logmath_get_base, [:logmath], FFI::NativeType::FLOAT64
+      attach_function :logmath_exp, [:logmath, :int], FFI::NativeType::FLOAT64
       attach_function :ps_set_jsgf_string, [:decoder, :string, :string], :int
       attach_function :ps_unset_search, [:decoder, :string], :int
       attach_function :ps_get_search, [:decoder], :string
