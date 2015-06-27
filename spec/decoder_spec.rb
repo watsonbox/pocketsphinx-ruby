@@ -143,6 +143,9 @@ describe Pocketsphinx::Decoder do
   describe '#hypothesis' do
     it 'calls libpocketsphinx' do
       expect(ps_api)
+        .to receive(:ps_get_logmath)
+
+      expect(ps_api)
         .to receive(:ps_get_hyp) do |ps_decoder, mp_path_score|
           expect(ps_decoder).to eq(subject.ps_decoder)
           expect(mp_path_score).to be_a(FFI::MemoryPointer)
@@ -153,10 +156,10 @@ describe Pocketsphinx::Decoder do
         end
 
       expect(ps_api)
-        .to receive(:ps_get_prob) do |ps_decoder|
-          expect(ps_decoder).to eq(subject.ps_decoder)
-          1
-        end
+        .to receive(:logmath_exp) do |logmath, mp_path_score_int|
+        expect(mp_path_score_int).to be_a(Integer)
+        1
+      end
 
       hypothesis = subject.hypothesis
 
