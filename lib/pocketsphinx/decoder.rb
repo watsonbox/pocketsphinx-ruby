@@ -123,8 +123,8 @@ module Pocketsphinx
 
       hypothesis.nil? ? nil : Hypothesis.new(
         hypothesis,
-        mp_path_score.get_int32(0),
-        posterior_prob
+        log_prob_to_linear(mp_path_score.get_int32(0)),
+        log_prob_to_linear(posterior_prob)
       )
     end
 
@@ -210,6 +210,12 @@ module Pocketsphinx
       if configuration.respond_to?(:post_init_decoder)
         configuration.post_init_decoder(self)
       end
+    end
+
+    # Convert logarithmic probability to linear floating point
+    def log_prob_to_linear(log_prob)
+      logmath = ps_api.ps_get_logmath(ps_decoder)
+      ps_api.logmath_exp(logmath, log_prob)
     end
   end
 end
