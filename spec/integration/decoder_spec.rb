@@ -20,8 +20,8 @@ describe Pocketsphinx::Decoder do
       subject.decode File.open('spec/assets/audio/goforward.raw', 'rb')
       expect(subject.hypothesis).to eq("go forward ten meters")
 
-      expect(subject.hypothesis.path_score).to eq(0.4659446069409511)
-      expect(subject.hypothesis.posterior_prob).to eq(0.004293161767851012)
+      expect(subject.hypothesis.path_score).to eq(0.4651996053749572)
+      expect(subject.hypothesis.posterior_prob).to eq( 0.0018953977306176936)
     end
 
     # FIXME: This test illustrates a current issue discussed in:
