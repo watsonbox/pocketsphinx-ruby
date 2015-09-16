@@ -16,7 +16,7 @@ module Pocketsphinx
       end
     end
 
-    Word = Struct.new(:word, :start_frame, :end_frame)
+    Word = Struct.new(:word, :start_frame, :end_frame, :acoustic_score, :language_score, :backoff_mode, :posterior_prob)
 
     attr_writer :ps_api
     attr_accessor :configuration
@@ -132,19 +132,30 @@ module Pocketsphinx
     #
     # @return [Array] Array of words with start/end frame values (10msec/frame)
     def words
-      mp_path_score = FFI::MemoryPointer.new(:int32, 1)
-      start_frame   = FFI::MemoryPointer.new(:int32, 1)
-      end_frame     = FFI::MemoryPointer.new(:int32, 1)
+      mp_path_score  = FFI::MemoryPointer.new(:int32, 1)
+      start_frame    = FFI::MemoryPointer.new(:int32, 1)
+      end_frame      = FFI::MemoryPointer.new(:int32, 1)
+
+      acoustic_score = FFI::MemoryPointer.new(:int32, 1)
+      language_score = FFI::MemoryPointer.new(:int32, 1)
+      backoff_mode   = FFI::MemoryPointer.new(:int32, 1)
 
       seg_iter = ps_api.ps_seg_iter(ps_decoder, mp_path_score)
       words    = []
 
       until seg_iter.null? do
         ps_api.ps_seg_frames(seg_iter, start_frame, end_frame)
+
+        posterior_prob = ps_api.ps_seg_prob(seg_iter, acoustic_score, language_score, backoff_mode)
+
         words << Pocketsphinx::Decoder::Word.new(
           ps_api.ps_seg_word(seg_iter),
           start_frame.get_int32(0),
-          end_frame.get_int32(0)
+          end_frame.get_int32(0),
+          log_prob_to_linear(acoustic_score.get_int32(0)),
+          log_prob_to_linear(language_score.get_int32(0)),
+          backoff_mode.get_int32(0),
+          log_prob_to_linear(posterior_prob)
         )
         seg_iter = ps_api.ps_seg_next(seg_iter)
       end

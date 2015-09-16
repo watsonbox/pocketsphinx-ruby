@@ -20,8 +20,8 @@ describe Pocketsphinx::Decoder do
       subject.decode File.open('spec/assets/audio/goforward.raw', 'rb')
       expect(subject.hypothesis).to eq("go forward ten meters")
 
-      expect(subject.hypothesis.path_score).to eq(0.4651996053749572)
-      expect(subject.hypothesis.posterior_prob).to eq( 0.0018953977306176936)
+      expect(subject.hypothesis.path_score).to be_within(0.01).of(0.4651996053749572)
+      expect(subject.hypothesis.posterior_prob).to be_within(0.01).of(0.0018953977306176936)
     end
 
     # FIXME: This test illustrates a current issue discussed in:
@@ -44,8 +44,18 @@ describe Pocketsphinx::Decoder do
       subject.decode File.open('spec/assets/audio/goforward.raw', 'rb')
 
       expect(subject.words.map(&:word)).to eq(["<s>", "go", "forward", "ten", "meters", "</s>"])
-      expect(subject.words.map(&:start_frame)).to eq([0, 46, 64, 117, 153, 212])
-      expect(subject.words.map(&:end_frame)).to eq([45, 63, 116, 152, 211, 260])
+      expect(subject.words.map(&:start_frame)).to eq([2, 48, 66, 119, 155, 214])
+      expect(subject.words.map(&:end_frame)).to eq([47, 65, 118, 154, 213, 262])
+
+      expected_pps = [1.0, 0.9, 0.9, 0.1, 0.29, 1.0]
+      subject.words.map(&:posterior_prob).each_with_index do |pp, index|
+        expect(pp).to be_within(0.1).of(expected_pps[index])
+      end
+
+      expected_ls = [1.0, 0.95, 0.95, 0.94, 0.95, 0.98]
+      subject.words.map(&:language_score).each_with_index do |ls, index|
+        expect(ls).to be_within(0.1).of(expected_ls[index])
+      end
     end
   end
 end
