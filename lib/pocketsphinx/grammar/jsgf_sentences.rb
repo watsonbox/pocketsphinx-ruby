@@ -1,4 +1,3 @@
-require_relative 'jsgf'
 module Pocketsphinx
   module Grammar
     class JsgfSentences < Jsgf

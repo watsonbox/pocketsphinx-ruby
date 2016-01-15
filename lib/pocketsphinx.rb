@@ -14,6 +14,7 @@ require "pocketsphinx/grammar/jsgf_builder"
 require "pocketsphinx/grammar/jsgf_factory"
 require "pocketsphinx/grammar/jsgf_file"
 require "pocketsphinx/grammar/jsgf_string"
+require "pocketsphinx/grammar/jsgf_sentences"
 # Configuration
 require "pocketsphinx/configuration/setting_definition"
 require "pocketsphinx/configuration/base"

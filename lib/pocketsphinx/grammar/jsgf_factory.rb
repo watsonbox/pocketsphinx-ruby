@@ -1,6 +1,3 @@
-require_relative 'jsgf_string'
-require_relative 'jsgf_file'
-require_relative 'jsgf_sentences'
 module Pocketsphinx
   module Grammar
     class JsgfFactory
