@@ -11,7 +11,6 @@ require "pocketsphinx/api/call_helpers"
 # Grammar
 require "pocketsphinx/grammar/jsgf"
 require "pocketsphinx/grammar/jsgf_builder"
-require "pocketsphinx/grammar/jsgf_factory"
 require "pocketsphinx/grammar/jsgf_file"
 require "pocketsphinx/grammar/jsgf_string"
 require "pocketsphinx/grammar/jsgf_sentences"
