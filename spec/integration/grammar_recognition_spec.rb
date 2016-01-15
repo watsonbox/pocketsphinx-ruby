@@ -12,7 +12,7 @@ describe 'speech recognition with a grammar' do
 
   # Share decoder across all examples for speed
   before :all do
-    @configuration = Pocketsphinx::Configuration::Grammar.new('spec/assets/grammars/goforward.gram')
+    @configuration = Pocketsphinx::Configuration::Grammar.new(Pocketsphinx::Grammar::JsgfFactory.from_file('spec/assets/grammars/goforward.gram'))
     @decoder = Pocketsphinx::Decoder.new(@configuration)
   end
 

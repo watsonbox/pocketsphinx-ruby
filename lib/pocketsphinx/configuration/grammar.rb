@@ -3,10 +3,10 @@ module Pocketsphinx
     class Grammar < Default
       attr_accessor :grammar
 
-      def initialize(*args, &block)#(grammar_path = nil)
+      def initialize(jsfg_obj) #(grammar_path = nil)
         super()
-
-        @grammar = Pocketsphinx::Grammar::Jsgf.new(*args, &block)
+        raise 'argument has to be of type Grammar::Jsfg' unless jsfg_obj.is_a? Pocketsphinx::Grammar::Jsgf
+        @grammar=jsfg_obj
       end
 
       # Since JSGF strings are not supported in Pocketsphinx configuration (only files),

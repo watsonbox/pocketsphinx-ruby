@@ -7,7 +7,6 @@ module Pocketsphinx
       def initialize
         @ps_arg_defs = API::Pocketsphinx.ps_args
         @setting_definitions = SettingDefinition.from_arg_defs(@ps_arg_defs)
-
         # Sets default settings based on definitions
         @ps_config = API::Sphinxbase.cmd_ln_parse_r(nil, @ps_arg_defs, 0, nil, 1)
       end

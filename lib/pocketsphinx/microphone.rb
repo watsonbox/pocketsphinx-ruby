@@ -1,18 +1,14 @@
 module Pocketsphinx
   # Provides non-blocking live audio recording using libsphinxad
-  #
   # Implements Recordable interface (#start_recording, #stop_recording and #read_audio)
   class Microphone
     include API::CallHelpers
-
     attr_reader :ps_audio_device
     attr_writer :ps_api
     attr_reader :sample_rate
 
     # Opens an audio device for recording
-    #
     # The device is opened in non-blocking mode and placed in idle state.
-    #
     # @param [Fixnum] sample_rate Samples per second for recording, e.g. 16000 for 16kHz
     # @param [String] default_device The device name
     # @param [Object] ps_api A SphinxAD API implementation to use, API::SphinxAD if not provided
@@ -44,21 +40,18 @@ module Pocketsphinx
     end
 
     # Read next block of audio samples while recording; read upto max samples into buf.
-    #
     # @param [FFI::Pointer] buffer 16bit buffer of at least max_samples in size
     # @params [Fixnum] max_samples The maximum number of samples to read from the audio device
     # @return [Fixnum] Samples actually read (could be 0 since non-blocking); nil if not
-    #   recording and no more samples remaining to be read from most recent recording.
+    # recording and no more samples remaining to be read from most recent recording.
     def read_audio(buffer, max_samples = 2048)
       samples = ps_api.ad_read(@ps_audio_device, buffer, max_samples)
       samples if samples >= 0
     end
 
     # A Recordable may specify an audio reading delay
-    #
     # In the case of the Microphone, because we are doing non-blocking reads,
     # we specify a delay which should fill half of the max buffer size
-    #
     # @param [Fixnum] max_samples The maximum samples we tried to read from the audio device
     def read_audio_delay(max_samples = 2048)
       max_samples.to_f / (2 * sample_rate)

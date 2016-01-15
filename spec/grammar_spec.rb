@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe Pocketsphinx::Grammar::Jsgf do
   it "raises an exception when neither a file or block are given" do
-    expect { Pocketsphinx::Grammar::Jsgf.new }.to raise_exception "Either a path or block is required to create a JSGF grammar"
+    expect { Pocketsphinx::Grammar::Jsgf.new(nil) }.to raise_exception "a raw grammar has to be given"
   end
 
   context "reading a grammar from a file" do
     let(:grammar_path) { grammar :goforward }
-    subject { Pocketsphinx::Grammar::Jsgf.new(grammar_path) }
+    subject { Pocketsphinx::Grammar::JsgfFactory.from_file(grammar_path) }
 
     it "reads a grammar from a file" do
       expect(subject.raw.lines.count).to eq(15)
@@ -22,9 +22,23 @@ describe Pocketsphinx::Grammar::Jsgf do
     end
   end
 
+  context "reading a grammar from a string" do
+
+    it "reads a grammar from a string" do
+      grammar=Pocketsphinx::Grammar::JsgfFactory.from_string("#JSGF V1.0;\ngrammar default;\npublic <sentence> = Go forward ten meters")
+      expect(grammar.raw.lines.count).to eq(3)
+    end
+
+    context "the grammar string is invalid" do
+      it "raises an exception" do
+        expect { Pocketsphinx::Grammar::JsgfFactory.from_string("This Grammar is invalid") }.to raise_exception "Invalid JSGF grammar"
+      end
+    end
+  end
+
   context "building a grammer from a block" do
     subject do
-      Pocketsphinx::Grammar::Jsgf.new do
+      Pocketsphinx::Grammar::JsgfFactory.from_block do
         sentence "Go forward ten meters"
         sentence "Go backward ten meters"
       end

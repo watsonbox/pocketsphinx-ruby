@@ -65,7 +65,7 @@ module Pocketsphinx
     end
 
     def recognizing?
-      @recognizing == true
+      @recognizing
     end
 
     def pause
@@ -107,11 +107,9 @@ module Pocketsphinx
     # Yields as soon as any hypothesis is available
     def recognize_continuous(max_samples, buffer)
       process_audio(buffer, max_samples).tap do
-        if hypothesis = decoder.hypothesis
+        if (hypothesis = decoder.hypothesis)
           decoder.end_utterance
-
           yield hypothesis
-
           decoder.start_utterance
         end
       end
@@ -125,16 +123,12 @@ module Pocketsphinx
         while in_speech?
           process_audio(buffer, max_samples) or break
         end
-
         decoder.end_utterance
-
-        if hypothesis = decoder.hypothesis
+        if (hypothesis = decoder.hypothesis)
           yield hypothesis
         end
-
         decoder.start_utterance
       end
-
       process_audio(buffer, max_samples)
     end
 
