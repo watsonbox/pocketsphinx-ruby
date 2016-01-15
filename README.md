@@ -185,16 +185,24 @@ Another way of configuring Pocketsphinx is with a grammar, which is normally use
 Load a [JSGF](http://www.w3.org/TR/jsgf/) grammar from a file:
 
 ```ruby
-configuration = Pocketsphinx::Configuration::Grammar.new('sentences.gram')
+jsgf = Pocketsphinx::Grammar::JsgfFile.new('sentences.gram')
+configuration = Pocketsphinx::Configuration::Grammar.new(jsgf)
 ```
-
-Or build one dynamically with this simple DSL (currently only supports sentence lists):
+Load a [JSGF](http://www.w3.org/TR/jsgf/) grammar from a string:
 
 ```ruby
-configuration = Pocketsphinx::Configuration::Grammar.new do
+jsgf = Pocketsphinx::Grammar::JsgfString.new("#JSGF V1.0;\ngrammar default;\npublic <sentence> = Go forward ten meters")
+configuration = Pocketsphinx::Configuration::Grammar.new(jsgf)
+```
+
+Or build one dynamically with this simple DSL:
+
+```ruby
+jsgf = Pocketsphinx::Grammar::JsgfSentences.new do 
   sentence "Go forward ten meters"
   sentence "Go backward ten meters"
 end
+configuration = Pocketsphinx::Configuration::Grammar.new(jsgf)
 ```
 
 ## Recognition Accuracy and Training
