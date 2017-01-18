@@ -28,8 +28,13 @@ module Pocketsphinx
     #
     # @param [Configuration] configuration
     # @param [FFI::Pointer] ps_decoder An optional Pocketsphinx decoder. One is initialized if not provided.
-    def initialize(configuration, ps_decoder = nil)
-      @configuration = configuration
+    def initialize(ps_decoder = nil)
+      # The underlying cmu-pocketsphinx library has its own configuration workflow and parameter files and
+      # any parameters passed into the decoder initializtion may be selectively overwritten at any time by
+      # the underlying library.  As such, Configuration.default should not be viewed as a reliable
+      # configuration object, and is provided here to fill in any additional parameters that are not already
+      # specified in the underlying system libraries.
+      @configuration = Pocketsphinx::Configuration.default
       init_decoder if ps_decoder.nil?
     end
 
