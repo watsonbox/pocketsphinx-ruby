@@ -65,7 +65,7 @@ describe Pocketsphinx::Configuration do
 
   describe '#setting_names' do
     it 'contains the names of all possible system settings' do
-      expect(subject.setting_names.count).to eq(114)
+      expect(subject.setting_names.count).to eq(113)
     end
   end
 
@@ -74,9 +74,9 @@ describe Pocketsphinx::Configuration do
       expect(subject.details 'vad_threshold').to eq({
         name: "vad_threshold",
         type: :float,
-        default: 2.0,
+        default: 3.0,
         required: false,
-        value: 2.0,
+        value: 3.0,
         info: "Threshold for decision between noise and silence frames. Log-ratio between signal level and noise level."
       })
     end
@@ -84,7 +84,7 @@ describe Pocketsphinx::Configuration do
     it 'gives details for all settings when no name is specified' do
       details = subject.details
 
-      expect(details.count).to eq(114)
+      expect(details.count).to eq(113)
       expect(details.first).to eq({
         name: "agc",
         type: :string,
