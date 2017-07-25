@@ -11,8 +11,8 @@ describe Pocketsphinx::Decoder do
   end
 
   it 'reads cmninit configuration values from default acoustic model feat.params' do
-    expect(configuration.details('cmninit')[:default]).to eq("8.0")
-    expect(configuration.details('cmninit')[:value]).to eq("40,3,-1")
+    expect(configuration.details('cmninit')[:default]).to eq("40,3,-1")
+    expect(configuration.details('cmninit')[:value]).to eq("41.00,-5.29,-0.12,5.09,2.48,-4.07,-1.37,-1.78,-5.08,-2.05,-6.45,-1.42,1.17")
   end
 
   describe '#decode' do
@@ -20,8 +20,8 @@ describe Pocketsphinx::Decoder do
       subject.decode File.open('spec/assets/audio/goforward.raw', 'rb')
       expect(subject.hypothesis).to eq("go forward ten meters")
 
-      expect(subject.hypothesis.path_score).to eq(0.4651996053749572)
-      expect(subject.hypothesis.posterior_prob).to eq( 0.0018953977306176936)
+      expect(subject.hypothesis.path_score).to eq(0.49327822492667395)
+      expect(subject.hypothesis.posterior_prob).to eq(0.037719430745321664)
     end
 
     # FIXME: This test illustrates a current issue discussed in:
@@ -43,9 +43,9 @@ describe Pocketsphinx::Decoder do
     it 'reports words with start/end frame values' do
       subject.decode File.open('spec/assets/audio/goforward.raw', 'rb')
 
-      expect(subject.words.map(&:word)).to eq(["<s>", "go", "forward", "ten", "meters", "</s>"])
-      expect(subject.words.map(&:start_frame)).to eq([0, 46, 64, 117, 153, 212])
-      expect(subject.words.map(&:end_frame)).to eq([45, 63, 116, 152, 211, 260])
+      expect(subject.words.map(&:word)).to eq(["<s>", "<sil>", "go", "forward", "ten", "meters", "</s>"])
+      expect(subject.words.map(&:start_frame)).to eq([0, 25, 46, 64, 117, 153, 212])
+      expect(subject.words.map(&:end_frame)).to eq([24, 45, 63, 116, 152, 211, 260])
     end
   end
 end
