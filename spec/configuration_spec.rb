@@ -65,7 +65,7 @@ describe Pocketsphinx::Configuration do
 
   describe '#setting_names' do
     it 'contains the names of all possible system settings' do
-      expect(subject.setting_names.count).to eq(114)
+      expect(subject.setting_names.count).to eq(112)
     end
   end
 
@@ -84,7 +84,7 @@ describe Pocketsphinx::Configuration do
     it 'gives details for all settings when no name is specified' do
       details = subject.details
 
-      expect(details.count).to eq(114)
+      expect(details.count).to eq(112)
       expect(details.first).to eq({
         name: "agc",
         type: :string,

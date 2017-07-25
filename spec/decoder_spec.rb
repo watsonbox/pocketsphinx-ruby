@@ -166,7 +166,7 @@ describe Pocketsphinx::Decoder do
     end
   end
 
-  describe '#words' do
+  context '#words' do
     let(:iterator) { FFI::MemoryPointer.from_string("") }
 
     it 'calls libpocketsphinx' do
@@ -177,7 +177,19 @@ describe Pocketsphinx::Decoder do
         end_frame.put_int16(0, 20)
       end
 
-      expect(ps_api).to receive(:ps_seg_word).ordered.and_return("one")
+      expect(ps_api).to receive(:ps_seg_prob).ordered do |seg_iter, acoustic_score, language_score, backoff_mode|
+        acoustic_score.put_int32(0, 1)
+        language_score.put_int32(0, 2)
+        backoff_mode.put_int32(0, 3)
+      end.and_return(0.5)
+      expect(ps_api).to receive(:ps_get_logmath).with(subject.ps_decoder).ordered.and_return(:logmath)
+      expect(ps_api).to receive(:logmath_exp).with(:logmath, 1).ordered.and_return(0.1)
+      expect(ps_api).to receive(:ps_get_logmath).with(subject.ps_decoder).ordered.and_return(:logmath)
+      expect(ps_api).to receive(:logmath_exp).with(:logmath, 2).ordered.and_return(0.2)
+      expect(ps_api).to receive(:ps_get_logmath).with(subject.ps_decoder).ordered.and_return(:logmath)
+      expect(ps_api).to receive(:logmath_exp).with(:logmath, 0.5).ordered.and_return(0.51)
+
+      expect(ps_api).to receive(:ps_seg_word).and_return("one")
       expect(ps_api).to receive(:ps_seg_next).ordered.and_return(iterator)
 
       expect(ps_api).to receive(:ps_seg_frames).ordered do |seg_iter, start_frame, end_frame|
@@ -185,13 +197,25 @@ describe Pocketsphinx::Decoder do
         end_frame.put_int16(0, 40)
       end
 
-      expect(ps_api).to receive(:ps_seg_word).ordered.and_return("two")
+      expect(ps_api).to receive(:ps_seg_prob).ordered do |seg_iter, acoustic_score, language_score, backoff_mode|
+        acoustic_score.put_int32(0, 4)
+        language_score.put_int32(0, 5)
+        backoff_mode.put_int32(0, 6)
+      end.and_return(0.6)
+      expect(ps_api).to receive(:ps_get_logmath).with(subject.ps_decoder).ordered.and_return(:logmath)
+      expect(ps_api).to receive(:logmath_exp).with(:logmath, 4).ordered.and_return(0.4)
+      expect(ps_api).to receive(:ps_get_logmath).with(subject.ps_decoder).ordered.and_return(:logmath)
+      expect(ps_api).to receive(:logmath_exp).with(:logmath, 5).ordered.and_return(0.5)
+      expect(ps_api).to receive(:ps_get_logmath).with(subject.ps_decoder).ordered.and_return(:logmath)
+      expect(ps_api).to receive(:logmath_exp).with(:logmath, 0.6).ordered.and_return(0.62)
+
+      expect(ps_api).to receive(:ps_seg_word).and_return("two")
       expect(ps_api).to receive(:ps_seg_next).ordered.and_return(FFI::Pointer::NULL)
 
       words = subject.words
 
-      expect(words[0]).to eq(Pocketsphinx::Decoder::Word.new("one", 10, 20))
-      expect(words[1]).to eq(Pocketsphinx::Decoder::Word.new("two", 30, 40))
+      expect(words[0]).to eq(Pocketsphinx::Decoder::Word.new("one", 10, 20, 0.1, 0.2, 3, 0.51))
+      expect(words[1]).to eq(Pocketsphinx::Decoder::Word.new("two", 30, 40, 0.4, 0.5, 6, 0.62))
     end
   end
 
