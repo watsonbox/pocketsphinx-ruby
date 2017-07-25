@@ -1,5 +1,10 @@
 # Changelog
 
+**v0.3.1 - 16/07/17**
+
+* SphinxBase API change [removes `err_set_debug_level`](https://github.com/cmusphinx/sphinxbase/commit/69c473ca648b8e2f8e453f27a405107a245bbcdd).
+
+
 **v0.3.0 - 17/04/15**
 
 * Add Words support to Decoder
